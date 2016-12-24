@@ -530,6 +530,7 @@ begin
   WriteLn(afile, '    include ' + usak.ortakyol + '\makrolar.asm');
   { DONE -oOwner -cCategory : progres bar 20-25 }
 
+  {TODO -oOwner -cCategory : kitaplýk davasý düzenlenecek ornek kitaplýða gire }
   for I := 0 to ListBox06.Items.Count - 1 do
     WriteLn(afile, '    include ' + usak.ktpyol + '\5110\amakro' + ListBox06.Items[i]);
   for I := 0 to ListBox08.Items.Count - 1 do
@@ -544,7 +545,7 @@ begin
     { TODO -oOwner -cCategory : burda biþiyle yapýyor abdurrahman abiyle kontrol et '5110' gerekmeyebilir }
     if usak.sonuc01 = 'ekle' then
     begin
-      WriteLn(afile, '    include ' + usak.ktpyol + '\5110\' + usak.sonuc02 + '\makro.asm');
+      WriteLn(afile, '    include ' + usak.ktpyol + usak.sonuc02 + '\makro.asm');
       ListBox02.Items.Add(usak.ktpyol + '\' + usak.sonuc02 + '\pin')
       { TODO -oeyüp -cGeneral : kmtekle yazýlacak abduraahman abiye sor ??? }
       { kmtekle(csp.sonuc2) }
@@ -751,7 +752,7 @@ begin
   begin
     WriteLn(afile, '             org 0x008');
     WriteLn(afile, '             goto kesme_1');
-    WriteLn(afile, '             org 0x008');
+    WriteLn(afile, '             org 0x018');
     WriteLn(afile, '             goto kesme_2');
   end;
 
@@ -763,7 +764,7 @@ begin
   WriteLn(afile, '     BSF ADCON0,ADON ;Enable A/D Conversion Module');
 
   WriteLn(afile, '');
-  WriteLn(afile, '_BAS');
+  WriteLn(afile, '_BAS');     // seyup dosyasý ayar dosyasý
   WriteLn(afile, '     clrf        TRISA');
   WriteLn(afile, '     clrf        TRISB');
   WriteLn(afile, '     clrf        TRISC');
@@ -772,13 +773,14 @@ begin
   WriteLn(afile, '     movlw       0x07');
   WriteLn(afile, '     movwf       CMCON');
   { DONE -oOwner -cCategory : ActionItem analog ekleme }
-  if ana = 0 then
+  {TODO -oOwner -cGeneral : ana deðiþkenini atadýðýn yer kontrol et}
+  if ana = 0 then  // analog yoksa
   begin
     WriteLn(afile, '     movlw       0x0F');
     WriteLn(afile, '     movwf       ADCON1');
     WriteLn(afile, '     BCF         EECON1, EEPGD');
   end
-  else
+  else              //analog varsa
   begin
     WriteLn(afile, '     CLRF ADCON0 ;clear ADCON0 to select channel');
     WriteLn(afile, '     MOVLW 0x0E;VSS,VDD ref. AN0 analog only');
@@ -816,7 +818,7 @@ begin
   { adosya = Open System.User.Home &/ "Pikyaz/mcrsy/kyt.pic" For Read
     While Not Eof(adosya)
     Line Input #adosya, yazi10
-    If Trim$(yazi10) Like ("seri*") Then
+    If Trim$(yazi10) Like ("seri*") Then    //seri iletþim için yapýlmýþ
     Print #afile, "     bcf  TRISC,6"
     Print #afile, "     bcf TRISC, 7"
     Print #afile, "     movlw 253"

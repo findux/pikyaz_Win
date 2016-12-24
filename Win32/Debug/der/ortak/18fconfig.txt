@@ -1,0 +1,28 @@
+       LIST  P = 18F2550,f = INHX32 ,w = 2, x = on, r = DEC, mm = ON, n = 0, c = 255
+        include  p18f2550.inc 
+        CONFIG    FOSC = HSPLL_HS
+        CONFIG    CPUDIV = OSC1_PLL2
+        CONFIG    PLLDIV = 3
+        CONFIG    MCLRE = ON
+        CONFIG    STVREN = OFF
+        CONFIG    IESO=OFF
+        CONFIG    LVP = OFF
+        CONFIG    BOR = OFF 
+        CONFIG    PWRT = ON
+        CONFIG    WDT = OFF
+        CONFIG    DEBUG = OFF
+        CONFIG    CP1 = OFF
+        CONFIG    CP2 = OFF
+        CONFIG    CP3 = OFF
+        CONFIG    CPB = OFF
+        CONFIG    WRT0 = OFF
+        CONFIG    WRT1 = OFF
+        CONFIG    WRT2 = OFF
+        CONFIG    WRT3 = OFF
+        CONFIG    WRTB = OFF
+        CONFIG    WRTC = OFF
+        CONFIG    EBTR0 = OFF
+        CONFIG    EBTR1 = OFF
+        CONFIG    EBTR2 = OFF
+        CONFIG    EBTR3 = OFF
+        CONFIG    EBTRB = OFF

@@ -242,7 +242,7 @@ object Form1: TForm1
       Align = alLeft
       TabOrder = 7
       ExplicitLeft = 331
-      ExplicitTop = -3
+      ExplicitTop = 4
     end
   end
   object ListBox01: TListBox

@@ -262,6 +262,7 @@ var
   row: string;
   m: TStringList;
 begin
+ShowMessage(usak.rawCode(RichEdit1.Lines.Text));
 
 
   //
@@ -327,12 +328,12 @@ begin
   ProgressBar1.Position := 0;
   { TODO -oEyüp -cCategory : liste 3 ü tekar doldurmaya gerek varmý komut için ??? }
   ProgressBar1.Position := 5;
+  //ornek git hub
 
   AssignFile(afile, usak.mcrsyyol + '\kyt.pic');
   ReWrite(afile);
-  WriteLn(afile, RichEdit1.Lines.Text);
+  WriteLn(afile,usak.rawCode( RichEdit1.Lines.Text));
   CloseFile(afile);
-
   // AssignFile(afile, usak.mcrsyyol + '\kyt_saf.pic');
   // ReWrite(afile);
   // WriteLn(afile, RichEdit1.Lines.Text);
@@ -352,9 +353,9 @@ begin
   adosya.LoadFromFile(usak.mcrsyyol + '\kyt.pic');
   for I := 0 to adosya.Count - 1 do
   begin
+//    usak.yazi := adosya[i];
+//    usak.noktavirgul;
     usak.yazi := adosya[i];
-    usak.noktavirgul;
-    usak.yazi := usak.sonuc01;
     usak.bos;
     if usak.sonuc01 = 'test' then
     begin
@@ -397,9 +398,9 @@ begin
       usak.yazi := usak.sonuc01;
       usak.esit;
       if Length(usak.sonuc01) = 4 then
-        yazi1 := '0' + Copy(usak.sonuc02, 4, 4)
+        yazi1 := '0' + Copy(usak.sonuc01, 4, 4)
       else if Length(usak.sonuc01) = 5 then
-        yazi1 := Copy(usak.sonuc02, 4, 5)
+        yazi1 := Copy(usak.sonuc01, 4, 5)
       else
       begin
         ShowMessage('"' + adosya[i] + '"' + ' Pin belirsiz!' + IntToStr(Length(usak.sonuc01)));
@@ -540,7 +541,7 @@ begin
     usak.noktavirgul;
     usak.yazi := usak.sonuc01;
     usak.bos;
-    { TODO -oOwner -cCategory : burda biþiyle yapýyor abdurrahman abiyle kontrol et }
+    { TODO -oOwner -cCategory : burda biþiyle yapýyor abdurrahman abiyle kontrol et '5110' gerekmeyebilir }
     if usak.sonuc01 = 'ekle' then
     begin
       WriteLn(afile, '    include ' + usak.ktpyol + '\5110\' + usak.sonuc02 + '\makro.asm');
@@ -1183,6 +1184,7 @@ var
   sl, slinel: TStringList;
   I: Integer;
 begin
+
   usak.yolkontrolayar;
   sl := TStringList.Create;
   slinel := TStringList.Create;

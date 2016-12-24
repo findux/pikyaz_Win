@@ -13,7 +13,7 @@ local   Loop1,dechi,Delay1ms,Loop2,Endo
     movwf __j    
 Loop1        
     movf __j, f   ; Decrease __i and __j necessary
-    btfsc  STATUS,Z   ; number of times and call subprogram Delay1ms
+    skpnz   ; number of times and call subprogram Delay1ms
     goto dechi    
     call Delay1ms    
     decf __j, f    
@@ -118,7 +118,7 @@ cazalt
 cik2
     endm
 eg  macro  addr   ; eşitse adrese git
-    btfsc  STATUS,Z
+    skpnz
     goto  addr 
     endm 
 bg  macro  addr   ; büyükse adrese git
@@ -337,36 +337,36 @@ local COMPL,COMPL1,COMPL2,byk,est,cilis
     clrf  __snc
     movf  deg1+3,0       ; get high byte of comp value
     subwf deg2+3,0      ; subtract values
-    btfsc  STATUS,Z     ; first check if result is 0
+    skpnz     ; first check if result is 0
     goto  COMPL          ; if zero compare low bytes
-    btfsc STATUS,C      ; else test carry bit
+    skpnc      ; else test carry bit
     goto  byk
     bsf   __snc,0
     goto  cilis            ;  WORD < COMP, return with 80h
 COMPL
     movf  deg1+2,0         ; get low byte of comp value
     subwf deg2+2,0        ; subtract values
-    btfsc  STATUS,Z        ; first check if result is 0
+    skpnz        ; first check if result is 0
     goto  COMPL1        ; if zero compare low bytes
-    btfsc STATUS,C        ; else test carry bit
+    skpnc        ; else test carry bit
     goto  byk              ;  WORD > COMP, return with 01h
     bsf   __snc,0
     goto  cilis           ;  WORD < COMP, return with 80h
 COMPL1
     movf  deg1+1,0       ; get low byte of comp value
     subwf deg2+1,0      ; subtract values
-    btfsc  STATUS,Z      ; first check if result is 0
+    skpnz      ; first check if result is 0
     goto  COMPL2       ; if zero compare low bytes
-    btfsc STATUS,C      ; else test carry bit
+    skpnc      ; else test carry bit
     goto  byk             ;  WORD > COMP, return with 01h
     bsf   __snc,0
     goto  cilis             ;  WORD < COMP, return with 80h
 COMPL2
     movf  deg1,0          ; get low byte of comp value
     subwf deg2,0          ; subtract values
-    btfsc  STATUS,Z          ; first check if result is 0
+    skpnz          ; first check if result is 0
     goto  est             ; if result is 0  WORD= COMP , return with 00
-    btfsc STATUS,C         ; if c set then WORD > COMP
+    skpnc         ; if c set then WORD > COMP
     goto  byk              ; if WORD > COMP, return with 01h
     bsf   __snc,0
     goto  cilis             ; if WORD < COMP, return with 80h end 
@@ -492,3 +492,157 @@ bit1
      	    bsf LATC,cs
      	endif
      	endm
+     
+darp macro
+    bsf LATB,1		; clk 1
+	  bcf LATB,1		; clk 0			; bit13
+    endm
+    
+tcolc macro deg  ; termokupl sıcaklık ölçümü
+local bit14,bit13,bit12,bit11,bit10,bit9,bit8,bit7,bit6,bit5
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	clrf deg	
+	clrf deg+1
+	bcf LATC,2		; cs yi indir. veri alımı başlıyor. 
+	 darp
+	darp
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit14
+	movlw b'00000010'   ; deg+spdeg2 = 571 
+	movwf	deg+1  
+	
+bit14
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	darp
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit13
+	movf deg,0	; deg regb ye yükle
+	movwf	REGB0
+	movf deg+1,0
+	movwf	REGB1
+	movlw 0x01	; rega = 256
+	movwf	REGA1
+	call  toplama		; topla
+	movf REGA0,0 
+	movwf deg  ; sonuç deg de. 
+	movf REGA1,0
+	movwf deg+1
+bit13
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	darp
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit12
+	movf deg+1,0
+	movwf	REGB1
+	movf deg,0
+	movwf	REGB0
+	movlw .128
+	movwf	REGA0
+	call  toplama
+	movf REGA0,0 
+	movwf deg
+	movf REGA1,0
+	movwf deg+1
+	call clrregb
+	call clrrega
+bit12
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	darp
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit11
+	movf deg+1,0
+	movwf	REGB1
+	movf deg,0
+	movwf	REGB0
+	movlw .64
+	movwf	REGA0
+	call  toplama
+	movf REGA0 ,0
+	movwf deg
+	movf REGA1,0
+	movwf deg+1
+	call clrregb
+	call clrrega
+bit11
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	darp; bit10
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit10
+	movf deg+1,0
+	movwf	REGB1
+	movf deg,0
+	movwf	REGB0
+	movlw .32
+	movwf	REGA0
+	call  toplama
+	movf REGA0 ,0
+	movwf deg
+	movf REGA1,0
+	movwf deg+1
+	call clrregb
+	call clrrega
+bit10
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	darp;	bit9
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit9
+	movf deg+1,0
+	movwf	REGB1
+	movf deg,0
+	movwf	REGB0
+	movlw .16
+	movwf	REGA0
+	call  toplama
+	movf REGA0 ,0
+	movwf deg
+	movf REGA1,0
+	movwf deg+1
+	call clrregb
+	call clrrega
+bit9
+	darp;	bit 8
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit8
+	artir deg
+	artir deg
+	artir deg
+	artir deg
+	artir deg
+	artir deg
+	artir deg
+	artir deg
+bit8
+	darp;			bit7
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit7
+	artir deg
+	artir deg
+	artir deg
+	artir deg
+bit7
+	darp;		bit 6
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit6
+	artir deg
+	artir deg
+bit6
+	darp;				bit5
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit5
+	artir deg
+bit5
+	darp;bit	4
+	darp;bit	3
+	darp;bit	2
+	darp;bit	1
+	darp;bit	0
+	darp;	boş
+	bsf  LATC,2
+	endm
+	
