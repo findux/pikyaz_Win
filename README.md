@@ -1,2 +1,2 @@
-# pikyazLinux
-pikyaz yazılımınım linux kaynak dosyaları
+# pikyazWin
+pikyaz yazılımınım windows kaynak dosyaları
