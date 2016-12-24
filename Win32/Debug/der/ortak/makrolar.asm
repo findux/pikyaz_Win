@@ -1,0 +1,494 @@
+  variable  _forsayi=0 
+  variable  _nxtsayi=0 
+  variable  _seltot=0 
+  variable  _selectsayi=0 
+  variable  _castot=0 
+  variable  _casesayi=0 
+  variable   __snc
+bekle   macro par1
+local   Loop1,dechi,Delay1ms,Loop2,Endo
+    movlw high par1   ; Higher byte of parameter 1 goes to __i
+    movwf __i    
+    movlw low par1   ; Lower byte of parameter 1 goes to __j
+    movwf __j    
+Loop1        
+    movf __j, f   ; Decrease __i and __j necessary
+    btfsc  STATUS,Z   ; number of times and call subprogram Delay1ms
+    goto dechi    
+    call Delay1ms    
+    decf __j, f    
+    goto Loop1    
+dechi        
+    movf __i, f    
+    btfsc STATUS, Z    
+    goto Endo    
+    call Delay1ms    
+    decf __i, f    
+    decf __j, f    
+    goto Loop1    
+Delay1ms:       ; Delay1ms produces a one milisecond delay
+    movlw .250   ; 100*10us=1ms
+    movwf __k   ; __k<-100
+Loop2:        
+    nop
+    nop
+    nop
+    nop
+    nop    
+    nop    
+    nop    
+    decfsz __k, f    
+    goto Loop2   ; Time period necessary to execute loop Loop2
+    return   ; equals 10us
+Endo        
+    endm
+temizle macro  deg1
+    clrf deg1
+    clrf deg1+1
+    clrf deg1+2
+    clrf deg1+3
+    ENDM
+yukle16   macro  sayi,ustd,altd
+  movlw LOW(sayi)
+  movwf altd
+  movlw HIGH(sayi)
+  movwf ustd
+  ENDM
+  
+yukle    macro  deg1,deg2
+  movf deg1,0
+  movwf deg2
+  movf deg1+1,0
+  movwf deg2+1
+  movf deg1+2,0
+  movwf deg2+2
+  movf deg1+3,0
+  movwf deg2+3
+  ENDM
+solakaydir macro deg1
+    rlcf  deg1,f
+    rlcf  deg1+1,f
+    rlcf  deg1+2,f
+    rlcf  deg1+3,f
+    endm
+sagakaydir macro deg1
+    rrcf  deg1,f
+    rrcf  deg1+1,f
+    rrcf  deg1+2,f
+    rrcf  deg1+3,f
+    endm
+movsd  macro  sayi,deg
+    movlw sayi
+    movwf deg
+    endm
+    
+artir  macro deg
+local aartir,bartir,cartir,cik
+    incf deg,1
+    eg aartir
+    goto cik
+aartir
+    incf deg+1,1
+    eg bartir
+    goto cik
+bartir
+    incf deg+2,1
+    eg cartir
+    goto cik
+cartir
+    incf deg+3,1
+cik
+    endm
+    
+azalt  macro deg
+local aazalt,bazalt,cazalt,cik2
+    decf deg,1
+    eg aazalt
+    goto cik2
+aazalt
+    decf deg+1,1
+    eg bazalt
+    goto cik2
+bazalt
+    decf deg+2,1
+    eg cazalt
+    goto cik2
+cazalt
+    decf deg+3,1
+cik2
+    endm
+eg  macro  addr   ; eşitse adrese git
+    btfsc  STATUS,Z
+    goto  addr 
+    endm 
+bg  macro  addr   ; büyükse adrese git
+    btfsc  STATUS,C 
+    goto  addr 
+    endm 
+tests macro prt,pin,btsy
+    if (prt == 0 )  ; PORTA
+        BTFSC PORTA,pin
+         goto bitti2#v(btsy)
+    endif
+    if (prt == 1 )  ; PORTB
+        BTFSC PORTB,pin
+         goto bitti2#v(btsy)
+    endif
+    if (prt == 2 )  ; PORTC
+        BTFSC PORTC,pin
+         goto bitti2#v(btsy)
+    endif
+    endm
+  
+bip macro port,pin ,sure
+    clrf REGB3
+    for REGB3,0,sure
+        if (port == 0)  ; PORTA
+            bsf LATA,pin  ; LATA,3
+        endif
+        if (port == 1)  ; PORTB
+            bsf LATB,pin  ; LATB,3
+        endif
+        if (port == 2)  ; PORTA
+            bsf LATC,pin  ; LATC,3
+        endif
+        bekle 10
+         if (port == 0)  ; PORTA
+            bcf LATA,pin  ; LATA,3
+        endif
+        if (port == 1)  ; PORTB
+            bcf LATB,pin  ; LATB,3
+        endif
+        if (port == 2)  ; PORTA
+            bcf LATC,pin  ; LATC,3
+        endif
+        bekle 10
+    next REGB3
+    endm
+    
+testb macro prt,pin,btsy
+    if (prt == 0 )  ; PORTA
+        BTFSS PORTA,pin
+         goto bitti2#v(btsy)
+    endif
+    if (prt == 1 )  ; PORTB
+        BTFSS PORTB,pin
+         goto bitti2#v(btsy)
+    endif
+    if (prt == 2 )  ; PORTC
+        BTFSS PORTC,pin
+         goto bitti2#v(btsy)
+    endif
+    endm
+  
+tstbson macro btsy
+bitti2#v(btsy)
+  bekle 500
+    endm
+min macro deg,deg1,deg2  ; kod deg = max(deg1,deg2)
+local __son,__kckm
+    clrf __snc
+    __COMP deg1,deg2  ;deg1 ve deg2 yi  karşılaştır 
+    btfsc __snc,0  ;  __snc,0 0 sa atla deg1 < deg2  
+    goto __kckm
+    yukle deg1,deg
+    goto __son
+__kckm
+    yukle deg2,deg
+__son
+   endm
+max macro deg,deg1,deg2  ; kod deg = max(deg1,deg2)
+local __son,__kckm
+    clrf __snc
+    __COMP deg1,deg2  ;deg1 ve deg2 yi  karşılaştır 
+    btfsc __snc,0  ;  __snc,0 0 sa atla deg1 < deg2  
+    goto __kckm
+    yukle deg2,deg
+    goto __son
+__kckm
+    yukle deg1,deg
+__son
+   endm
+eger macro deg,isaret,deg1,btsy
+    clrf __snc
+    __COMP deg,deg1  ;deg ve deg1 i  karşılaştır 
+    if (isaret == 3) ; eşit işareti
+        btfss __snc,2  ;  1 se atla
+        goto bitti#v(btsy)
+    endif
+    if ( isaret == 4) ; farklı   işareti ab ! 4  
+          btfsc __snc,2  ;  1 se atla
+          goto bitti#v(btsy)
+    endif
+    if (isaret == 1) ; küçük işareti
+        btfsc __snc,0  ;  1 se atla
+        goto bitti#v(btsy)
+    endif
+    if ( isaret == 2) ; büyük işareti
+        btfsc __snc,1  ;  1 se atla
+        goto bitti#v(btsy)
+    endif
+    endm
+egerson macro btsy
+bitti#v(btsy)
+    endm
+    
+for  macro  deg,sayi1,sayi2 
+      movlw  sayi1   ; deg = begl
+      movwf  deg 
+_for#v(_forsayi) 
+    movlw  sayi2   ; deg - endl
+    subwf  deg,w 
+    eg  _next#v(_forsayi) ; for next bitti .. eşitse next#v(forsayi) a çıkışa  git
+_forsayi  set  _forsayi+1  ; değilse fornext devam.. --  forsayi = forsayi +1
+_nxtsayi  set  _forsayi   ; nextknt = forknt
+    endm 
+    
+next  macro  deg 
+_nxtsayi  set  _nxtsayi-1  ; nextknt = nxtknt -1
+    incf  deg,f           ; var = var +1
+    goto  _for#v(_nxtsayi) ; for#v(_nxtsayi) a git 
+_next#v(_nxtsayi) 
+    endm 
+nextl  macro  deg,sayi 
+_nxtsayi  set  _nxtsayi-1 
+    movf  deg,w 
+    addlw  sayi 
+    movwf  deg 
+    goto  _for#v(_nxtsayi) 
+_next#v(_nxtsayi) 
+    endm 
+    
+    
+    
+forf  macro  deg,sayi,deg2 
+    movlw  sayi 
+    movwf  deg
+_for#v(_forsayi) 
+    movf  deg,w 
+    subwf  deg2,0
+    eg  _next#v(_forsayi) 
+_forsayi  set  _forsayi+1 
+_nxtsayi  set  _forsayi 
+    endm 
+    
+nextf  macro  deg,deg2 
+_nxtsayi  set  _nxtsayi-1 
+    movf  deg,w
+    addwf  deg2,f
+    goto  _for#v(_nxtsayi) 
+_next#v(_nxtsayi)
+    endm
+    
+    
+select  macro 
+_seltot  set  _seltot+1 
+_selectsayi  set  _seltot 
+    endm 
+    
+endselect  macro 
+sel#v(_selectsayi) 
+_selectsayi  set  _selectsayi-1 
+    endm 
+    
+case  macro  lit 
+_castot set  _castot+1 
+_casesayi  set  _castot 
+    xorlw  lit 
+    eg  cas#v(_casesayi) 
+    xorlw  lit 
+    goto  ecas#v(_casesayi) 
+cas#v(_casesayi) 
+    xorlw  lit 
+    endm 
+    
+casef  macro  var 
+_castot set  _castot+1 
+_casesayi  set  _castot 
+    xorwf  var,w 
+    eg  cas#v(_casesayi) 
+    xorwf  var,w 
+    goto  ecas#v(_casesayi) 
+cas#v(_casesayi) 
+    xorwf  var,w 
+    endm 
+    
+endcase  macro 
+    goto  sel#v(_selectsayi) 
+ecas#v(_casesayi) 
+_casesayi  set  _casesayi-1 
+    endm 
+    
+MOVFW MACRO PVARIN 
+    MOVF PVARIN,W 
+    ENDM 
+    
+RLF MACRO PVARIN,PDESTINATION 
+    RLCF PVARIN,PDESTINATION 
+    ENDM 
+    
+RRF MACRO PVARIN,PDESTINATION 
+    RRCF PVARIN,PDESTINATION 
+    ENDM
+                    ;Alt programdan çık.
+     
+__COMP macro deg1,deg2
+local COMPL,COMPL1,COMPL2,byk,est,cilis
+    clrf  __snc
+    movf  deg1+3,0       ; get high byte of comp value
+    subwf deg2+3,0      ; subtract values
+    btfsc  STATUS,Z     ; first check if result is 0
+    goto  COMPL          ; if zero compare low bytes
+    btfsc STATUS,C      ; else test carry bit
+    goto  byk
+    bsf   __snc,0
+    goto  cilis            ;  WORD < COMP, return with 80h
+COMPL
+    movf  deg1+2,0         ; get low byte of comp value
+    subwf deg2+2,0        ; subtract values
+    btfsc  STATUS,Z        ; first check if result is 0
+    goto  COMPL1        ; if zero compare low bytes
+    btfsc STATUS,C        ; else test carry bit
+    goto  byk              ;  WORD > COMP, return with 01h
+    bsf   __snc,0
+    goto  cilis           ;  WORD < COMP, return with 80h
+COMPL1
+    movf  deg1+1,0       ; get low byte of comp value
+    subwf deg2+1,0      ; subtract values
+    btfsc  STATUS,Z      ; first check if result is 0
+    goto  COMPL2       ; if zero compare low bytes
+    btfsc STATUS,C      ; else test carry bit
+    goto  byk             ;  WORD > COMP, return with 01h
+    bsf   __snc,0
+    goto  cilis             ;  WORD < COMP, return with 80h
+COMPL2
+    movf  deg1,0          ; get low byte of comp value
+    subwf deg2,0          ; subtract values
+    btfsc  STATUS,Z          ; first check if result is 0
+    goto  est             ; if result is 0  WORD= COMP , return with 00
+    btfsc STATUS,C         ; if c set then WORD > COMP
+    goto  byk              ; if WORD > COMP, return with 01h
+    bsf   __snc,0
+    goto  cilis             ; if WORD < COMP, return with 80h end 
+byk                         ;  WORD > COMP
+    bsf   __snc,1
+    goto  cilis
+est                         ;  WORD = COMP
+    bsf   __snc,2
+cilis
+  endm
+_sat  macro prt,clk,veri
+   clrf __snc
+   if (prt == 0 )  ; PORTA
+	bsf PORTA,clk		; clk 1
+	bcf PORTA,clk		; clk 0	
+   endif
+   if (prt == 1 )  ; PORTB
+	bsf PORTB,clk		; clk 1
+	bcf PORTB,clk		; clk 0	
+   endif
+   if (prt == 2 )  ; PORTC
+	bsf PORTC,clk		; clk 1
+	bcf PORTC,clk		; clk 0	
+   endif
+   btfss PORTA,veri
+   bsf __snc,0
+   endm
+ 
+spi8veri macro  deg,prt,cs,clk,veri
+local bit7,bit6,bit5,bit4,bit3,bit2,bit1
+      if (prt == 0 )  ; PORTA
+           bcf LATA,cs
+      endif
+      if (prt == 1 )  ; PORTB
+           bcf LATB,cs
+      endif
+      if (prt == 2 )  ; PORTC
+           bcf LATC,cs
+      endif
+     	_sat prt,clk,veri   ;  clock gönder veriyi al
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	goto bit7
+     	temizle REGA0  ; 128 ekle
+     	temizle REGB0
+     	movlw 128
+     	movwf REGA0
+     	yukle deg,REGB0
+     	call toplama
+     	yukle REGA0,deg
+bit7
+     	_sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	goto bit6
+     	temizle REGA0  ; 64 ekle
+     	temizle REGB0
+     	movlw 64
+     	movwf REGA0
+     	yukle deg,REGB0
+     	call toplama
+     	yukle REGA0,deg
+bit6
+     	_sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	goto bit5
+     	temizle REGA0  ; 32 ekle
+     	temizle REGB0
+     	movlw 32
+     	movwf REGA0
+     	yukle deg,REGB0
+     	call toplama
+     	yukle REGA0,deg
+	
+bit5
+     	_sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	goto bit4
+     	temizle REGA0  ; 16 ekle
+     	temizle REGB0
+     	movlw 16
+     	movwf REGA0
+     	yukle deg,REGB0
+     	call toplama
+     	yukle REGA0,deg
+bit4
+     	_sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	goto bit3
+     	artir deg ; 8 ekle
+     	artir deg
+     	artir deg
+     	artir deg
+     	artir deg
+     	artir deg
+     	artir deg
+     	artir deg
+bit3
+     	_sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	goto bit2
+     	artir deg  ; 4 ekle
+     	artir deg
+     	artir deg
+     	artir deg
+bit2
+     	_sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	goto bit1
+     	artir deg  ; 2 ekle
+     	artir deg
+bit1
+      _sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla
+     	artir deg   ; 1 ekle 
+     	_sat prt,clk,veri
+     	btfss __snc,0 ;  data 1 mi 1 se atla; 	boş
+     	if (prt == 0 )  ; PORTA
+     	    bsf LATA,cs
+     	endif
+     	if (prt == 1 )  ; PORTB
+     	    bsf LATB,cs
+     	endif
+     	if (prt == 2 )  ; PORTC
+     	    bsf LATC,cs
+     	endif
+     	endm

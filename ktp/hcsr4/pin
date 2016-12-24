@@ -1,0 +1,21 @@
+   ;kesme yok
+--  ; pin tanımları  
+pinlerhcsr4(hcsr4port,eko,trig)   ; pin isimleri
+eko g
+trig c
+
+
+            
+/  ; değişkenler
+
+
+
+++  ;  ayarlama kodları.. 
+movlw 49 
+movwf T1CON
+bsf             T1CON,5
+BSF             T1CON,4
+BCF             T1CON,6
+BSF             T1CON,7
+BSF             T1CON,T1SYNC
+bsf             T1CON,TMR1ON

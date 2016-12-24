@@ -1,0 +1,31 @@
+   ; bu dosya adı pin olmalıdır. 
+   ; --   /   ++  yeni bölüm başladığını bildirir. 
+   ; kesme ler ilk bölümde tanımlanır. 
+kesmeb0   	; rb0 kesmesi
+kesmeb1   	; rb1 kesmesi
+kesmeb2   	; rb2 kesmesi
+kesmet1   	; Timer0 kesmesi
+kesmet2   	; Timer1 kesmesi
+kesmeb47  	; portb değişim kesmesi
+
+--  ; çift tire  yazısı altında pin tanımları  yapılır.
+pinlerxxx(latx,portx,pinadı1,pinadı2)   ; pin tanımlarına   pinlerxxx(latx,portx,pinadı1,pinadı2) 
+
+latx   		; çıkış portu tanımı 
+portx  		; giriş portu tanımı
+pinadı1 c  	; pinin c ile çıkış olacağı tanımlandı. 
+pinadı2 g  	; pinin g ile giriş olacağı tanımlandı. 
+
+
+/  ; / çizgisinden sonra kitaplığın kullandığı değişkenler tanımlanır. kullanıcıların kullanmayacağı değişken isimleri kullanılmalı.
+
+__abc
+__def   	; gibi .....
+
+++  ;  ++  yazısı altında,  asm kodu olarak standart ayarlar yapılır. . 
+
+movlw  0x0F
+movwf  CMCON
+movlw  32
+movwf  SSPSTAT 
+

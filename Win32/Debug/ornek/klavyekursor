@@ -1,0 +1,36 @@
+﻿     ekle lcd  ; b g h y harfleriyle lcd kursoru taşıma...
+     ekle klavye
+     pinlerlcd(LATA,5,4,3,2,1,0)
+     deg ab
+     deg lodx
+     deg lody
+kod ayar(){
+     lcdgiris
+     lodx = 0
+     lody = 1
+     bekle 1000
+     }
+kod bas(){
+     ab = 0
+     tusoku ab
+     select ab
+         case B
+         lody = lody + 1
+     endcase
+     case G
+         lodx = lodx - 1
+     endcase
+     case J
+         lodx = lodx + 1
+     endcase
+     case Y
+         lody = lody - 1
+     endcase
+     case 105  ; tab tuşu
+         lody = 1
+         lodx = 0   
+     endcase
+     endselect
+     lcdkonum lody,lodx
+     bekle 2000
+     }

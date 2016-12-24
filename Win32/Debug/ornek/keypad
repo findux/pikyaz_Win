@@ -1,0 +1,76 @@
+﻿     ekle lcd
+     ekle keypad
+     pinlerlcd(LATA,5,4,3,2,1,0)
+     pinlerkeypad(LATB,PORTB,7,6,5,4,3,2,1,0)
+     Deg ab
+     deg cb
+kod ayar(){
+     ab = 0
+     lcdgiris
+     bekle 1000
+     }
+kod bas(){
+     lcdsil
+     keypad ab
+         lcdkonum 1,0
+         select ab
+         case 1
+         lcdyaz 1
+     endcase
+     case 2
+         lcdyaz 2
+     endcase
+     case 3
+         lcdyaz 3
+     endcase
+     case 4
+         lcdyaz 4
+     endcase
+     case 5
+         lcdyaz 5
+     endcase
+     case 6
+         lcdyaz 6
+     endcase
+     case 7
+         lcdyaz 7
+     endcase
+     case 8
+         lcdyaz 8
+     endcase
+     case 9
+         lcdyaz 9
+     endcase
+     case 10
+         lcdyaz A
+     endcase
+     case 11
+         lcdyaz B
+     endcase
+     case 12
+         lcdyaz C
+     endcase
+     case 13
+         lcdyaz D
+     endcase
+     case 14
+         lcdyaz #
+     endcase
+     case 15
+         lcdyaz *
+     endcase
+     case 16
+         lcdyaz P
+     endcase
+     endselect
+     cb = ab
+     lcdkonum 2,0
+     lcdtek ab          
+     bekle 2000
+     }
+kod kesme1(){
+          
+     }
+kod kesme2(){
+          
+     }

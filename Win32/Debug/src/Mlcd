@@ -1,0 +1,753 @@
+   variable  rsmii
+   variable  ydk
+lcdsil  macro
+    movlw     0x01      ; Clear display
+    instw4
+    endm
+lcdgiris macro 
+    bekle   20           ; Wait 15 msecs
+    movlw   0x30              ; Send the Reset Instruction
+    movwf   lcdport           ;
+    Pulse_e           ; Pulse LCD_E
+    bekle   20
+    Pulse_e           ; Pulse LCD_E
+    bekle   20
+    Pulse_e             ; Pulse LCD_E
+    bekle   20
+    movlw   0x10                  ; Send the Data Length Specification
+    movwf   lcdport              ;
+    Pulse_e             ; Pulse LCD_E
+    bekle   20
+    movlw   0x028             ; Set Interface Length
+    instw4
+    movlw   0x10              ; Turn Off Display
+    instw4
+    movlw   0x001           ; Clear Display RAM
+    instw4
+    movlw   0x6             ; Set Cursor Movement
+    instw4
+    movlw   0xC             ; Turn on Display/Cursor
+    instw4
+    LCD_Clr        ; Clear the LCD
+    movlw ' '
+    LCD_Char
+    lcdsil
+    endm
+instw4 macro
+    movwf   LCDTemp           ;Temp storage
+    swapf   LCDTemp,1
+    movf    LCDTemp,0         ;Now W also holds the data
+    andlw   b'00001111'       ; get upper nibble
+    movwf   lcdport         ; send data to lcd
+    bcf     lcdport, rs
+    bsf     lcdport, e
+    bekle 20
+    bcf     lcdport, e
+    bekle 20
+    swapf   LCDTemp,0         ;get lower nibble to W
+    andlw   b'00001111'
+    movwf   lcdport         ;Write to LCD
+    bcf     lcdport, rs
+    bsf     lcdport, e
+    bekle 20    
+    bcf     lcdport, e   ;end of lower nibble
+    bekle 20
+    endm
+LCD_CharD  macro
+    addlw     0x30            ; add 0x30 to convert to ASCII
+    LCD_Char
+    endm
+LCD_Char     macro 
+    movwf     LCDTemp
+    swapf     LCDTemp,1
+    movf      LCDTemp,0 
+    andlw     0x0f
+    movwf     lcdport
+    bsf       lcdport, rs
+    bsf         lcdport, e 
+    nop  
+    bcf         lcdport, e
+    nop 
+    swapf     LCDTemp, w
+    andlw     0x0f
+    movwf     lcdport
+    bsf       lcdport, rs
+    bsf         lcdport, e 
+    nop  
+    bcf         lcdport, e
+    nop  
+    bekle     10
+    nop 
+    endm
+LCD_L1  macro
+    movlw       0x80        ; move to 2nd row, first column
+    instw4
+    endm
+LCD_L2  macro
+    movlw       0xc0       ; move to 2nd row, first column
+    instw4
+    endm
+LCD_Line1W  macro
+    addlw       0x80      ;move to 1st row, column W
+    instw4
+    endm
+LCD_Line2W  macro
+    addlw       0xc0      ;move to 2nd row, column W
+    instw4
+    endm
+LCD_L3  macro
+    addlw       0x94        ; move to 2nd row, first column
+    instw4
+    endm 
+LCD_L4  macro
+    addlw       0xD4      ; move to 2nd row, first column
+    instw4
+    endm
+kursorac  macro
+    movlw       0x0d
+    instw4
+    endm
+kursorkapa  macro
+    movlw       0x0c
+    instw4
+    endm
+LCD_Clr    macro
+    movlw       0x01      ; Clear display
+    instw4
+    endm
+Pulse_e macro;
+    bsf         lcdport, e 
+    nop  
+    bcf         lcdport, e
+    nop 
+    nop
+    endm 
+lcdkonum macro sayi1,sayi2
+      if (sayi1 == .1)
+            movlw  sayi2
+            addlw     0x80      ;move to 1st row, column W
+            instw4
+      endif
+      if (sayi1 == .2)
+            movlw  sayi2
+            addlw     0xc0      ;move to 2st row, column W
+            instw4
+          endif
+      if (sayi1 == .3)
+            movlw  sayi2
+            addlw     0x94       ;move to 3st row, column W
+            instw4
+      endif
+      if (sayi1 == .4)
+            movlw  sayi2
+            addlw     0xD4       ;move to 4st row, column W
+            instw4
+      endif
+    endm
+lcdkonum1 macro sayi1,deg2
+      if (sayi1 == .1)
+            movf  deg2,0
+            addlw     0x80      ;move to 1st row, column W
+            instw4
+      endif
+      if (sayi1 == .2)
+            movf  deg2,0
+            addlw     0xc0      ;move to 2st row, column W
+            instw4
+          endif
+      if (sayi1 == .3)
+            movf  deg2,0
+            addlw     0x94       ;move to 3st row, column W
+            instw4
+      endif
+      if (sayi1 == .4)
+            movf  deg2,0
+            addlw     0xD4       ;move to 4st row, column W
+            instw4
+      endif
+    endm
+lcdkonum2 macro deg1,sayi2
+local ikk,ukk,dkk,son
+      movf deg1,0
+      xorlw  1
+      skpz
+      goto ikk
+            movlw  sayi2
+            addlw     0x80      ;move to 1st row, column W
+            instw4
+            goto son
+ikk
+     movf deg1,0
+      xorlw  2
+      skpz
+      goto ukk
+            movlw  sayi2
+            addlw     0xc0      ;move to 2st row, column W
+            instw4
+          goto son
+ukk
+     movf deg1,0
+      xorlw  3
+      skpz
+      goto dkk
+            movlw  sayi2
+            addlw     0x94       ;move to 3st row, column W
+            instw4
+      goto son
+dkk
+            movlw  sayi2
+            addlw     0xD4       ;move to 4st row, column W
+            instw4
+son
+    endm
+    
+lcdkonum3 macro deg1,deg2
+local ikk,ukk,dkk,son
+      movf deg1,0
+      xorlw  1
+      skpz
+      goto ikk
+            movf  deg2,0
+            addlw     0x80      ;move to 1st row, column W
+            instw4
+            goto son
+ikk
+     movf deg1,0
+      xorlw  2
+      skpz
+      goto ukk
+            movf  deg2,0
+            addlw     0xc0      ;move to 2st row, column W
+            instw4
+          goto son
+ukk
+     movf deg1,0
+      xorlw  3
+      skpz
+      goto dkk
+            movf  deg2,0
+            addlw     0x94       ;move to 3st row, column W
+            instw4
+      goto son
+dkk
+            movf  deg2,0
+            addlw     0xD4       ;move to 4st row, column W
+            instw4
+son
+    endm
+lcdyaz macro sayi
+    movlw   sayi
+    LCD_Char
+    endm
+lcddeg macro deg
+    movf   deg,0
+    LCD_Char
+    endm
+
+    
+lcdbas macro  deg
+local eesiyaz,dwm
+    temizle REGA0
+    yukle deg,REGA0
+    rlcf  REGA3,0   ;Trap negative values
+    skpnc
+    GOTO eesiyaz
+    goto  dwm
+eesiyaz
+    movlw '_'
+    LCD_Char
+    call absa
+dwm
+    cevir deg
+    rakamyaz
+    endm
+    
+lcd1bas macro  deg
+    yukle  deg,REGA0
+    Display
+    endm
+lcdtek macro  deg
+    temizle REGA0
+    movf deg,0
+    movwf REGA0
+    movf deg+1,0
+    movwf REGA1
+    bin16_BCD
+    rayaz
+    endm
+rayaz macro
+    movf DIGIT5,0
+    LCD_CharD
+    movf DIGIT4,0
+    LCD_CharD
+    movf DIGIT3,0
+    LCD_CharD
+    movf DIGIT2,0
+    LCD_CharD
+    movf DIGIT1,0
+    LCD_CharD
+    endm
+bin16_BCD  macro
+local Lb1,Lb2,Lb3,Lb4
+        swapf   REGA1, W
+        andlw   0x0F
+        addlw   0xF0
+        movwf   DIGIT4 
+        addwf   DIGIT4, F 
+        addlw   0xE2 
+        movwf   DIGIT3 
+        addlw   0x32 
+        movwf   DIGIT1 
+
+        movf    REGA1, W 
+        andlw   0x0F 
+        addwf   DIGIT3, F 
+        addwf   DIGIT3, F 
+        addwf   DIGIT1, F 
+        addlw   0xE9 
+        movwf   DIGIT2 
+        addwf   DIGIT2, F 
+        addwf   DIGIT2, F 
+
+        swapf   REGA0, W 
+        andlw   0x0F 
+        addwf   DIGIT2, F 
+        addwf   DIGIT1, F 
+
+        rlcf    DIGIT2, F 
+        rlcf    DIGIT1, F 
+        comf  DIGIT1, F 
+        rlcf    DIGIT1, F 
+
+        movf    REGA0, W 
+        andlw   0x0F 
+        addwf   DIGIT1, F 
+        rlcf    DIGIT4,F 
+
+        movlw   0x07 
+        movwf   DIGIT5 
+
+        movlw   0x0A
+Lb1: 
+        decf    DIGIT2, F 
+        addwf   DIGIT1, F 
+        btfss   STATUS, C 
+        bra    Lb1 
+Lb2: 
+        decf    DIGIT3, F 
+        addwf   DIGIT2, F 
+        btfss   STATUS,C 
+        bra    Lb2 
+Lb3: 
+        decf    DIGIT4, F 
+        addwf   DIGIT3, F 
+        btfss   STATUS,C
+        bra    Lb3 
+Lb4: 
+        decf    DIGIT5, F 
+        addwf   DIGIT4, F 
+        btfss   STATUS,C 
+        bra    Lb4 
+
+        endm
+        
+lcdhvs macro
+   LCD_CharD
+   endm
+
+rakamyaz macro
+local nb1,nb2,nb3,nb4,nb5,nb6,nb7,nb8,nb9,yaz9,yaz8,yaz7,yaz6,yaz5,yaz4,yaz3,yaz2
+      clrf key
+      MOVF      DIGIT10,0 ;  digit10 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb1
+      bsf key,0
+      MOVF      DIGIT10,0
+      lcdhvs
+nb1
+      btfsc  key,0
+      goto yaz9
+      MOVF      DIGIT9,0;  digit9 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb2
+yaz9
+      bsf  key,0
+      MOVF      DIGIT9,0
+      lcdhvs
+nb2
+      btfsc  key,0
+      goto yaz8
+      MOVF      DIGIT8,0   ;  digit8 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb3
+yaz8
+      bsf  key,0
+      MOVF      DIGIT8,0
+      lcdhvs
+nb3
+      btfsc  key,0
+      goto yaz7
+      MOVF      DIGIT7,0   ;  digit7 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb4
+yaz7
+      bsf  key,0
+      MOVF      DIGIT7,0
+      lcdhvs
+nb4
+      btfsc  key,0
+      goto yaz6
+      MOVF      DIGIT6,0   ;  digit6 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb5
+yaz6
+      bsf  key,0
+      MOVF      DIGIT6,0
+      lcdhvs
+nb5
+      btfsc  key,0
+      goto yaz5
+      MOVF      DIGIT5,0   ;  digit5 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb6
+yaz5
+      bsf  key,0
+      MOVF      DIGIT5,0
+      lcdhvs
+nb6
+      btfsc  key,0
+      goto yaz4
+      MOVF      DIGIT4,0   ;  digit4 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb7
+yaz4
+      bsf  key,0
+      MOVF      DIGIT4,0
+      lcdhvs
+nb7
+      btfsc  key,0
+      goto yaz3
+      MOVF      DIGIT3,0   ;  digit3 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb8
+yaz3
+      bsf  key,0
+      MOVF      DIGIT3,0
+      lcdhvs
+nb8
+      btfsc  key,0
+      goto yaz2
+      MOVF      DIGIT2,0   ;  digit2 0 mı
+      xorlw     0x0
+      skpnz
+      goto nb9
+yaz2
+      bsf  key,0
+      MOVF      DIGIT2,0
+      lcdhvs
+nb9
+     MOVF      DIGIT1,0
+      lcdhvs
+      endm
+    
+    
+_sayukle macro
+      MOVF      key,0   ; sayıyı key den yukle
+      movwf     REGA0
+      MOVF      bey,0
+      movwf     REGA1
+      MOVF      OUT,0
+      movwf     REGA2
+      MOVF      dgdeg,0
+      endm
+_reyukle macro
+      MOVF      REGA0,0   ; sayıyı key ye sakla
+      movwf     key
+      MOVF      REGA1,0
+      movwf     bey
+      MOVF      REGA2,0
+      movwf     OUT
+      MOVF      REGA3,0
+      movwf     dgdeg
+      endm
+cevir   macro  deg   
+      clrdig
+      _reyukle
+      clrf        REGB0
+      movlw       b'11001010'  
+      movwf       REGB1
+      movlw       b'10011010'  
+      movwf       REGB2
+      movlw       b'00111011'  
+      movwf       REGB3
+      call bolme                   ; REGA=REGA / REGB  = Asılsayı  / 1 000 000 000
+      movf        REGA0,0; milyar lar karakteri
+      movwf       DIGIT10  ;///////////////////
+      
+      movlw       b'00000000'  ; REGB= 1 000  000 000
+      movwf       REGB0
+      movlw       b'11001010'  
+      movwf       REGB1
+      movlw       b'10011010'  
+      movwf       REGB2
+      movlw       b'00111011'  
+      movwf       REGB3
+    
+      clrf        REGA1
+      clrf        REGA2
+      clrf        REGA3
+    
+      call carpma            ; REGA= DIGIT10 x 1 000 000 000
+      call  movab             ; REGB= DIGIT10 x 1000000000
+      _sayukle          ; REGA= asılsayı
+      call cikarma           ; asılsayı - DIGIT10 x 1000000000
+      _reyukle          ; temp te kalan sayı 
+    
+      clrf       REGB0
+      movlw       b'11100001'  
+      movwf       REGB1
+      movlw       b'11110101'  
+      movwf       REGB2
+      movlw       b'00000101'  
+      movwf       REGB3
+      call bolme
+      movf        REGA0,0     ; yuzmilyon lar karakteri
+      movwf       DIGIT9      ;///////////////////
+    
+      clrf       REGB0
+      movlw       b'11100001'  
+      movwf       REGB1
+      movlw       b'11110101'  
+      movwf       REGB2
+      movlw       b'00000101'  
+      movwf       REGB3
+      clrf        REGA1
+      clrf        REGA2
+      clrf        REGA3
+    
+      call carpma          ; REGA= DIGIT9 x 100 000 000
+      call movab           ; REGB= DIGIT9x 100000000
+      _sayukle        ; REGA= asılsayı
+      call cikarma         ; asılsayı - DIGIT9 x 100000000
+      _reyukle        ; temp te kalan sayı 
+    
+      movlw     b'10000000'  ; REGB= REGA /10 000 000
+      movwf     REGB0
+      movlw     b'10010110'  
+      movwf     REGB1
+      movlw     b'10011000'  
+      movwf     REGB2
+      clrf      REGB3
+      call bolme
+      movf      REGA0,0       ; onmilyon lar karakteri
+      movwf     DIGIT8        ;///////////////////
+      
+      movlw     b'10000000'  ; REGB= REGA /100  000 000
+      movwf     REGB0
+      movlw     b'10010110'  
+      movwf     REGB1
+      movlw     b'10011000'  
+      movwf     REGB2
+      clrf      REGB3
+        
+      clrf      REGA1
+      clrf      REGA2
+      clrf      REGA3
+    
+      call carpma              ; REGA= DIGIT8 x 10000000
+      call movab                 ; REGB= DIGIT8x 10000000
+      _sayukle            ; REGA= asılsayı
+      call cikarma             ; asılsayı - DIGIT8 x 10000000
+      _reyukle            ; temp te kalan sayı 
+    
+      movlw     b'01000000'  ; REGB= REGA /1 000 000
+      movwf     REGB0
+      movlw     b'01000010'  
+      movwf     REGB1
+      movlw     b'00001111'  
+      movwf     REGB2
+      clrf      REGB3
+      call bolme
+      movf      REGA0,0         ; milyon lar karakteri
+      movwf     DIGIT7          ;///////////////////
+    
+      movlw     b'01000000'    ; REGB= 1 000 000
+      movwf     REGB0
+      movlw     b'01000010'  
+      movwf     REGB1
+      movlw     b'00001111'  
+      movwf     REGB2
+      clrf      REGB3
+    
+      clrf      REGA1
+      clrf      REGA2
+      clrf      REGA3
+    
+      call carpma              ; REGA= DIGIT7 x 1000000
+      call movab               ; REGB= DIGIT7x 1000000
+      _sayukle              ; REGA= asılsayı
+      call cikarma             ; asılsayı - DIGIT7 x 1000000
+      _reyukle            ; temp te kalan sayı 
+    
+      movlw     b'10100000'   ; REGB= REGA /100 000
+      movwf     REGB0
+      movlw     b'10000110'  
+      movwf     REGB1
+      movlw     b'00000001'  
+      movwf     REGB2
+      clrf      REGB3
+      call bolme
+      movf      REGA0,0        ; yuzbin ler karakteri
+      movwf     DIGIT6        ;///////////////////
+    
+      movlw     b'10100000'   ; REGB= 100 000
+      movwf     REGB0
+      movlw     b'10000110'  
+      movwf     REGB1
+      movlw     b'00000001'  
+      movwf     REGB2
+      clrf      REGB3
+    
+      clrf      REGA1
+      clrf      REGA2
+      clrf      REGA3
+    
+      call carpma            ; REGA= DIGIT6 x 100000
+      call movab             ; REGB= DIGIT6x 100000
+      _sayukle          ; REGA= asılsayı
+      call cikarma           ; asılsayı - DIGIT6 x 100000
+      _reyukle            ; temp te kalan sayı 
+    
+      movlw     b'00010000'  ; REGB= REGA /10 000
+      movwf     REGB0
+      movlw     b'00100111'  
+      movwf     REGB1
+      clrf      REGB2
+      clrf      REGB3
+      call bolme
+      movf      REGA0,0        ; onbin ler karakteri
+      movwf     DIGIT5          ;///////////////////
+    
+    
+      movlw     b'00010000'  ; REGB=10 000
+      movwf     REGB0
+      movlw     b'00100111'  
+      movwf     REGB1
+      clrf      REGB2
+      clrf      REGB3
+      clrf      REGA1
+      clrf      REGA2
+      clrf      REGA3
+    
+      call carpma            ; REGA= DIGIT5 x 10 000
+      call movab         ; REGB= DIGIT5x 10 000
+      _sayukle        ; REGA= asılsayı
+      call cikarma         ; asılsayı - DIGIT5 x 10 000
+      _reyukle          ; temp te kalan sayı 
+    
+      movlw     b'11101000'  ; REGB= REGA /1 000
+      movwf     REGB0
+      movlw     b'00000011'  
+      movwf     REGB1
+      clrf      REGB2
+      clrf      REGB3
+      call bolme
+      movf      REGA0,0        ; bin ler karakteri
+      movwf     DIGIT4          ;///////////////////
+    
+      movlw     b'11101000'  ; REGB= REGA /1 000
+      movwf     REGB0
+      movlw     b'00000011'  
+      movwf     REGB1
+      clrf      REGB2
+      clrf      REGB3
+      clrf      REGA1
+      clrf      REGA2
+      clrf      REGA3
+    
+      call carpma            ; REGA= DIGIT4 x 1000
+      call movab             ; REGB= DIGIT4x 1000
+      _sayukle          ; REGA= asılsayı
+      call cikarma             ; asılsayı - DIGIT4 x 1000
+      _reyukle          ; temp te kalan sayı 
+    
+      movlw     b'01100100'  ; REGB= REGA /100
+      movwf     REGB0
+      clrf      REGB1
+      clrf      REGB2
+      clrf      REGB3
+      call bolme
+      movf      REGA0,0      ; yuz ler karakteri
+      movwf     DIGIT3      ;///////////////////
+    
+      movlw     b'01100100'  ; REGB= REGA /100
+      movwf     REGB0
+      clrf      REGB1
+      clrf      REGB2
+      clrf      REGB3
+      clrf      REGA1
+      clrf      REGA2
+      clrf      REGA3
+    
+      call carpma            ; REGA= DIGIT3 x 100
+      call movab             ; REGB= DIGIT3x 100
+      _sayukle            ; REGA= asılsayı
+      call cikarma           ; asılsayı - DIGIT3 x 100
+      _reyukle          ; temp te kalan sayı 
+    
+      movlw     b'00001010'  ; REGB= REGA /10
+      movwf     REGB0
+      clrf      REGB1
+      clrf      REGB2
+      clrf      REGB3
+      call bolme
+      movf      REGA0,0          ; on lar karakteri
+      movwf     DIGIT2        ;///////////////////
+  
+    
+      movlw     b'00001010'   ; REGB= REGA /10
+      movwf     REGB0
+      clrf      REGB1
+      clrf      REGB2
+      clrf      REGB3
+      clrf      REGA1
+      clrf      REGA2
+      clrf      REGA3
+    
+      call carpma            ; REGA= DIGIT2 x 10
+      call movab             ; REGB= DIGIT2x 10
+      _sayukle          ; REGA= asılsayı
+      call cikarma           ; asılsayı - DIGIT2 x 10
+      movf      REGA0,0        ;kalan bir ler karakteri
+      movwf     DIGIT1          ;///////////////////
+      endm
+clrdig macro
+    clrf    DSIGN
+    clrf    DIGIT1
+    clrf    DIGIT2
+    clrf    DIGIT3
+    clrf    DIGIT4
+    clrf    DIGIT5
+    clrf    DIGIT6
+    clrf    DIGIT7
+    clrf    DIGIT8
+    clrf    DIGIT9
+    clrf    DIGIT10
+    clrf    REGB3
+    clrf    REGB2
+    clrf    REGB1
+    clrf    REGB0
+    clrf    key
+    clrf    bey
+    clrf    OUT
+    clrf    dgdeg
+    endm
+    

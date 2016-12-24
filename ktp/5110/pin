@@ -1,0 +1,17 @@
+   ;kesme yok
+-- ; pin tanımları  
+pinler5110(_5110port,dc,cs,rst)   ;pin5110(LATC,0,1,2)  pin isimleri
+
+dc c
+cs c
+rst c
+     
+
+/   ; değişkenler
+
+++  ;  ayarlama kodları.. 
+
+movlw    0x00   
+movwf    SSPSTAT 
+movlw    0x32 
+movwf    SSPCON1 

@@ -1,0 +1,14 @@
+﻿
+                        ;// Picyaz PİC  Programlama  //
+ kod ayar(){            ; ayarlama bölümü 
+        pin20=c           ; pin20/C0 çıkış
+   }
+kod bas(){
+        bip pin21 0 100 ; 100 ms. c0 portunda bip sesi çıkarır.
+  }
+kod kesme1(){
+
+  }
+kod kesme2(){
+ 
+  }

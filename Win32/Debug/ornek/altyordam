@@ -1,0 +1,31 @@
+﻿ekle lcd
+                    ;// Picyaz PİC  Programlama  //
+   pinlerlcd(LATA,5,4,3,2,1,0) 
+ deg ab       
+ deg cb
+ deg db
+ kod ayar(){           ; ayarlama bölümü 
+  cb = 12
+          lcdgiris           ; lcd başlatma komutları
+          bekle 1000
+   }
+kod bas(){              ; kodlar burada yazılacak...
+        artir cb
+        db = 2*cb
+        altkod1(cb)      ;altkod1 e gi cb değeri ile gider.  yordamı çalıştırıyor
+        altkod2(db)      ;altkod2 ye db değeri ile gider. 
+  }
+  kod altkod1(prt){
+        ab = prt            ; gelen değer ab değişkenine atandı.
+        lcdsil  
+        lcdkonum 1,0
+        lcdyaz cb=
+        lcdbas ab           ; lcd ye ab yazıldı.
+  }
+  kod altkod2(prt){
+        ab = prt            ; gelen değer ab değişkenine atandı.
+        lcdkonum 2,0
+        lcdyaz db=
+        lcdbas ab           ; lcd ye ab yazıldı.
+        bekle 5000
+  }

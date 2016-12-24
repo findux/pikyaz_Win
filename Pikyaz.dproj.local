@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.063,C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Pikyaz.dproj=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.779,C:\_Pikyaz\Pikyaz.pas=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.406,=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.818,C:\_Pikyaz\Pikyazfrm.pas=C:\_Pikyaz\Pikyaz.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.092,C:\_Pikyaz\pUsak.pas=C:\_Pikyaz\pSetup.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.027,C:\_Pikyaz\pSetup.pas=C:\_Pikyaz\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.779,C:\_Pikyaz\Pikyaz.dfm=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.818,C:\_Pikyaz\Pikyazfrm.dfm=C:\_Pikyaz\Pikyaz.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.961,C:\_Pikyaz\Csplit.pas=C:\_Pikyaz\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.476,C:\_Pikyaz\Csplit.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.883,=C:\_Pikyaz\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.817,=C:\_Pikyaz\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.061,=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.965,=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.227,C:\_Pikyaz\Pikyaz.dproj=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Pikyaz.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.073,=C:\Users\findu\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

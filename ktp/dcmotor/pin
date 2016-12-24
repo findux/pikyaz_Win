@@ -1,0 +1,23 @@
+   ;kesme yok
+--  ; pin tanımları  
+pinlerdcmotor(dcport,sag,sol)   ; pin isimleri
+
+sag c
+sol c
+
+
+
+/  ; değişkenler
+
+++  ;  ayarlama kodları.. 
+
+movlw 14
+movwf  CCP1CON
+movlw 10
+movwf  CCPR1L
+movlw 13
+movwf  CCP2CON
+movlw 155
+movwf  PR2
+movlw 4
+movwf  T2CON

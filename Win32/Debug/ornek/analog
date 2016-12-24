@@ -1,0 +1,16 @@
+﻿     ekle lcd
+     pinlerlcd(LATB,5,4,3,2,1,0)
+     analog1
+     deg ab
+          
+kod ayar(){
+     lcdgiris
+     bekle 1000
+     }
+kod bas(){
+     lcdsil
+     anaoku1 ab
+     lcdbas ab
+     bekle 5000
+     }
+          

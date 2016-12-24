@@ -1,0 +1,15 @@
+--SPI yazılımsal örneğinde yüklemede sorunvar karaşimsek yükleniyor spi işleniyor	
+	
+-- Şu örnekler eksik	
+dc motor örneği				
+dosya açma örneği			
+i2c iletişim örneği ekle	
+klavye sayiya çevirme örneği
+müzik örneği				
+sd card bağlantı	örneği	
+sd card dosya okuma	örneği	
+sd card dosyaya yazma örneği
+servo motor örneği		
+step motor orneği		
+TFT çizim	örneği		
+TFT yazım	örneği    

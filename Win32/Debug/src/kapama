@@ -1,0 +1,155 @@
+darp
+    bsf LATB,1		; clk 1
+	  bcf LATB,1		; clk 0			; bit13
+    return
+olc
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	clrf ab	
+	clrf ab_a
+
+	bcf LATC,2		; cs yi indir. veri alımı başlıyor. 
+	call darp
+	call darp
+
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit14
+	movlw b'00000010'   ; ab+spdeg2 = 571 
+	movwf	ab_a  
+	
+bit14
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	call darp
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit13
+	movf ab,0	; ab regb ye yükle
+	movwf	REGB0
+	movf ab_a,0
+	movwf	REGB1
+	movlw 0x01	; rega = 256
+	movwf	REGA1
+	call  toplama		; topla
+	movf REGA0,0 
+	movwf ab  ; sonuç ab de. 
+	movf REGA1,0
+	movwf ab_a
+bit13
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	call darp
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit12
+	movf ab_a,0
+	movwf	REGB1
+	movf ab,0
+	movwf	REGB0
+	movlw .128
+	movwf	REGA0
+	call  toplama
+	movf REGA0,0 
+	movwf ab
+	movf REGA1,0
+	movwf ab_a
+	call clrregb
+	call clrrega
+bit12
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	call darp
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit11
+	movf ab_a,0
+	movwf	REGB1
+	movf ab,0
+	movwf	REGB0
+	movlw .64
+	movwf	REGA0
+	call  toplama
+	movf REGA0 ,0
+	movwf ab
+	movf REGA1,0
+	movwf ab_a
+	call clrregb
+	call clrrega
+bit11
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	call darp; bit10
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit10
+	movf ab_a,0
+	movwf	REGB1
+	movf ab,0
+	movwf	REGB0
+	movlw .32
+	movwf	REGA0
+	call  toplama
+	movf REGA0 ,0
+	movwf ab
+	movf REGA1,0
+	movwf ab_a
+	call clrregb
+	call clrrega
+bit10
+	call clrregb   ; regb temizle
+	call clrrega	; rega temizle
+	call darp;	bit9
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit9
+	movf ab_a,0
+	movwf	REGB1
+	movf ab,0
+	movwf	REGB0
+	movlw .16
+	movwf	REGA0
+	call  toplama
+	movf REGA0 ,0
+	movwf ab
+	movf REGA1,0
+	movwf ab_a
+	call clrregb
+	call clrrega
+bit9
+	call darp;	bit 8
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit8
+	artir ab
+	artir ab
+	artir ab
+	artir ab
+	artir ab
+	artir ab
+	artir ab
+	artir ab
+bit8
+	call darp;			bit7
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit7
+	artir ab
+	artir ab
+	artir ab
+	artir ab
+
+bit7
+	call darp;		bit 6
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit6
+	artir ab
+	artir ab
+bit6
+
+	call darp;				bit5
+	btfss PORTB,0 ;  PORTB,0 1 mi 1 se atla
+	goto bit5
+	artir ab
+bit5
+	call darp;bit	4
+	call darp;bit	3
+	call darp;bit	2
+	call darp;bit	1
+	call darp;bit	0
+	call darp;	boş
+	bsf  LATC,2
+	return
+	

@@ -1,0 +1,39 @@
+for; for ab=0-10 /  for döngüsü 
+next; next   / for döngüsü sonu
+test; test pin12 1  /   pin bir/sıfır mi? birse tsona kadar işlemleri yap.
+degilse; tson /  değilse / test sonu
+tson; tson   / test sonu
+eger; eger ab<15 eger ab=14    eger ab<>22 ..../ eger döngüsü 
+eson; eson  / eger döngü sonu
+select; select ab /  değişken seçilir
+endselect; endselect /  seçimi bitirir.
+case; case 6   / select ile seçilen değişkeni case de belirtilen duruma uygunsa endcase e kadar işlemleri yapar.
+endcase; endcase / case i kapatır.
+anaoku0 ; anaoku0 ab  / an0 girişini analog değer olarak okur ab değişkenine atar.
+anaoku1 ; anaoku1 ab  / an1 girişini analog değer olarak okur ab değişkenine atar.
+anaoku2 ; anaoku2 ab  / an2 girişini analog değer olarak okur ab değişkenine atar.
+anaoku3 ; anaoku3 ab  / an3 girişini analog değer olarak okur ab değişkenine atar.
+anaoku4 ; anaoku4 ab  / an4 girişini analog değer olarak okur ab değişkenine atar.
+yukle ; yukle ab,cb  /  ab değişkeninin değerini cb değişkenine atar.
+yukle16 ; yukle16  1754,ab,cb  /  üst ve alt baytları ayırır
+bekle; bekle 50000  /   5 saniyeye kadar bekeleme..
+artir; artir ab  / sayıyı 1 artıtır
+azalt; azalt ab  / sayıyı 1 azaltır
+pinXX; pin14=0  pin3=1  pin5=c   pin7=g /  pin tanımlama. giriş çıkış veya 1  0 yapılır.
+deg; deg ab  /  değişken tanımlama.
+max ; ab = max(ac,bc)  /  büyük olan değişkeni seçer
+min ; ab = min(ac,bc)  /  küçük olan değişkeni seçer
+epromoku; epromoku 5,ab  /  5 adresindeki değeri okur değişkene atar.
+epromyaz; epromyaz 5,12  /  12 değerini  5 adresine yazar.
+serioku; serioku ab  /  Seri Porttan gelen  veriyi okur veriyi değişkene atar
+seriyaz; seriyaz ab  /  Değişkendeki Veriyi Seri Porttan gönderir.
+spigiris ; spigiris  / spi başlangıç komutu
+spigonder ; spigonder ab,cb / ab değişkenindeki değeri spi olarak gönderir. gelen değeri cb ye yükler...
+spi8veri  ; spi8veri deg,port,cs,clk,veri  değişkene istenen porttaki cs,clk,veri pinlerine gelen veriyi yükler.
+temizle ; temizle ab / ab değişkenini sıfırlar. 
+bip ; bip pin20 100 / Belirtilen pin de tanımlı süre kadar ses çıkartır.
+git ; git dvm  /  dvm tanımlı yere gider. dvm:   şeklinde tanımlı bir kod olmalı.
+sagakaydir  ; sagakaydir ab / ab değişkeninin içeriğini sağa kaydırır.
+solakaydir  ; solakaydir ab / ab değişkeninin içeriğini sola kaydırır.
+port ; portb = 12 portc=bin(10110101) porta= hex(fe)  /  istenen değeri porta yazar.
+lat ; latb = 12 latc=bin(10110101) lata= hex(fe)  /  istenen değeri lata yazar.

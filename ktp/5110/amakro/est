@@ -1,0 +1,9 @@
+_estest    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00100100'
+    _datayaz   b'00100100'
+    _datayaz   b'00100100'
+    _datayaz   b'00100100'
+    _datayaz   b'00100100'
+    _datayaz   b'00000000'
+    endm

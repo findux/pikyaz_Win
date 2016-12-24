@@ -1,0 +1,18 @@
+﻿     deg cb
+     deg ab
+kod ayar(){
+     trisc = 0
+     }
+kod bas(){
+     ab = bin(00010001)
+     for cb = 0 - 4
+         sagakaydir ab
+         portc = ab
+         bekle 2000
+     next
+      for cb = 0 - 4
+         solakaydir ab
+         portc = ab
+         bekle 2000
+     next    
+     }

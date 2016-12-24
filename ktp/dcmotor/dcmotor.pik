@@ -1,0 +1,38 @@
+ekle dcmotor
+  ; pinlerdcmotor(dcport,sag,sol)   ; pin isimleri
+ekle lcd
+                    ; pinlerlcd(lcdport,d7,d6,d5,d4,e,rs)   ; pin isimleri
+                    ;// Picyaz PİC  Programlama  //
+   pinlerlcd(LATA,5,4,3,2,1,0)
+   pinlerdcmotor(LATC,1,2)  
+                    ; PORTA 5.pin RS, 4.pin Enable,
+      deg ab              ; 0. pin data4, 1.pin data5,2. pin data4, 3.pin data5  e bağlanıyor..
+ kod ayar(){        ; ayarlama bölümü 
+            pin20=g
+            pin24=g
+          lcdgiris           ; lcd başlatma komutları
+          bekle 1000
+   }
+kod bas(){          ; kodlar burada yazılacak...
+        lcdsil            ; lcdyi temizle..
+        test pin20 1
+            artir ab
+        tson
+        test pin24 1
+            azalt ab
+        tson
+        eger ab < 1
+            ab= 1
+        eson
+        eger ab > 254
+            ab= 254
+        eson
+        movf ab,0
+        movwf CCPR1L
+        pin21 = 0
+        pin22 = 1
+        lcdkonum 1,0
+        lcdbas ab
+        bekle 1500
+  }
+  

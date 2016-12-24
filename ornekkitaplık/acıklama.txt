@@ -1,0 +1,9 @@
+ 
+1-) her kitaplık için ayrı bir dizin oluşturulur.
+2-) her kitaplıkta 
+      pin isimli bir dosya 
+      makro isimli bir dosya
+      komut isimli bir dosya bulunur. 
+  
+3-) her dosyanın içinde hangi bilgiler bulunacağı o dosya içinde açıklanmıştır.
+4-) dosyalar hazırlandıktan sonra klasör tar.gz formatında sıkıştırılır. 

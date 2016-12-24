@@ -1,0 +1,9 @@
+_crpcrp    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00101000'
+    _datayaz   b'00010000'
+    _datayaz   b'01111100'
+    _datayaz   b'00010000'
+    _datayaz   b'00101000'
+    _datayaz   b'00000000'
+    endm

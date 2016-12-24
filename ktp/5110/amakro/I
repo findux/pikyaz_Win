@@ -1,0 +1,9 @@
+_ii    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'11110100'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    endm

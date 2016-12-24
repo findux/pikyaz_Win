@@ -1,0 +1,7 @@
+﻿     deg ab
+kod ayar(){
+
+     }
+kod bas(){
+     ab = spi8veri(porta,0,1,2) ; 0 cs 1 clk 2 veri pinleri!!!!
+     }

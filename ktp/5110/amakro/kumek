@@ -1,0 +1,9 @@
+_kumekkumek    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'10000001'
+    _datayaz   b'11100111'
+    _datayaz   b'00011000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    endm

@@ -1,0 +1,9 @@
+_cece    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00110000'
+    _datayaz   b'10001000'
+    _datayaz   b'10001000'
+    _datayaz   b'01010000'
+    _datayaz   b'00000000'
+    endm

@@ -1,0 +1,9 @@
+_PP    macro
+    _datayaz   b'00000000'
+    _datayaz   b'11111111'
+    _datayaz   b'00010010'
+    _datayaz   b'00010001'
+    _datayaz   b'00010001'
+    _datayaz   b'00001110'
+    _datayaz   b'00000000'
+    endm

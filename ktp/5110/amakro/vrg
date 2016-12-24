@@ -1,0 +1,9 @@
+_vrgvrg    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'01100000'
+    _datayaz   b'11100000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    endm

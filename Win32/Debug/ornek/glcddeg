@@ -1,0 +1,21 @@
+﻿     ekle glcd
+     pinlerglcd(LATB,LATA,0,1)
+     deg ab
+     deg cb
+          
+kod ayar(){
+     glcdgiris
+     ab = 20
+     cb = 2
+     bekle 1000
+     }
+kod bas(){
+     glcdkonum 1,0
+     glcdbas ab
+     glcdyaz +
+     glcdbas cb
+     glcdyaz =
+     ab = ab + cb
+     glcdbas ab
+     bekle 2000
+     }

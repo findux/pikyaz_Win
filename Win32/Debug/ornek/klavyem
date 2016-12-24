@@ -1,0 +1,31 @@
+﻿     ekle lcd
+     pinlerlcd(LATA,5,4,3,2,1,0)
+     ekle klavye
+     deg ab
+kod ayar(){
+     lcdgiris
+     bekle 1000
+     }
+kod bas(){
+     ab = 0
+     tusoku ab
+     select ab
+         case 60
+         lcdsil
+         git ygf
+     endcase
+     case 35
+         lcdkonum 2,0
+         git ygf
+     endcase
+     case 106
+          lcdyaz  
+         git ygf
+     endcase      
+     endselect
+     eger ab > 33
+         lcdb ab
+     eson
+     ygf:
+     bekle 5000
+     }

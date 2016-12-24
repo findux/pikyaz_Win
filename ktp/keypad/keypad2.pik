@@ -1,0 +1,33 @@
+ekle keypad
+  ; pinlerkeypad(keylat,keyport,y1,y2,y3,y4,a4,a3,a2,a1)
+ekle lcd
+  ; pinlerlcd(lcdport,d7,d6,d5,d4,e,rs)
+;// Pikyaz PİC  Programlama  //
+ 
+  pinlerlcd(LATA,3,2,1,0,4,5) 
+ pinlerkeypad(LATB,PORTB,7,6,5,4,3,2,1,0) 
+ 
+ deg ab
+ kod ayar(){
+  
+ lcdgiris           ; lcd başlatma komutları
+          bekle 1000
+   }
+kod bas(){
+  lcdsil
+  ab=0
+ keypad  ab
+   lcdkonum  2,0
+   movf ab,0
+   LCD_CharD
+ bekle 5000
+ 
+  }
+kod kesme1(){
+ 
+ 
+  }
+kod kesme2(){
+ 
+ 
+  }

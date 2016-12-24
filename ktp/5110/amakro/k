@@ -1,0 +1,9 @@
+_KK    macro
+    _datayaz   b'00000000'
+    _datayaz   b'11111111'
+    _datayaz   b'00011000'
+    _datayaz   b'00100100'
+    _datayaz   b'01000010'
+    _datayaz   b'10000001'
+    _datayaz   b'00000000'
+    endm

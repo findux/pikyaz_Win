@@ -1,0 +1,11 @@
+--
+pinlerlcd(lcdport,rs,e,d7,d6,d5,d4)   ; pinlerlcd(LATA,5,4,3,2,1,0) pin isimleri
+rs c
+e c
+d7 c
+d6 c
+d5 c
+d4 c
+/
+LCDTemp
+++ ;  ayarlama kodları..

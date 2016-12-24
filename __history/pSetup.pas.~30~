@@ -1,0 +1,206 @@
+unit pSetup;
+
+interface
+
+uses
+  Vcl.Controls, Vcl.Forms, System.SysUtils, System.Variants, System.Classes, Vcl.ComCtrls,
+  glwin32viewer, GLObjects;
+
+Type
+  TSetup = class(TObject)
+  public
+    sondosya: TextFile;
+    sonuc01: string;
+    sonuc02: string;
+    sonuc03: string;
+    sonuc04: string;
+    sonuc05: string;
+    sonuc06: string;
+    sonuc07: string;
+    sonuc08: string;
+    sonuc09: string;
+    sonuc10: string;
+    sonuc11: string;
+    sonuc12: string;
+    sonuc13: string;
+    sonuc14: string;
+    sonuc15: string;
+    sonuc16: string;
+    sonuc17: string;
+    sonuc18: string;
+    sonuc19: string;
+    sonuc20: string;
+    sonuc21: string;
+    sonuc22: string;
+    sonuc23: string;
+    sonuc24: string;
+    sonuc25: string;
+    sonuc26: string;
+    sonuc27: string;
+    sonuc28: string;
+    sonuc29: string;
+    sonuc30: string;
+    sonuc31: string;
+    sonuc32: string;
+    yazi: string;
+    stre: string;
+    hataflag: Boolean;
+    yol, ktpyol, lcdyol, deryol, ortakyol, mcrsyol, mcrsyyol: string;
+    m: TStringList;
+    constructor Create;
+    destructor Destroy;
+    procedure temiz;
+    procedure yolkontrolayar;
+    procedure noktavirgul;
+    procedure esit;
+    procedure bos;
+  private
+
+  end;
+
+implementation
+
+uses Pikyazfrm;
+{ TSetup }
+
+procedure TSetup.bos;
+var
+  I: Integer;
+begin
+  temiz;
+  m.Clear;
+  m.Delimiter := ' ';
+  m.StrictDelimiter := True;
+  m.DelimitedText := yazi;
+  for I := m.Count-1 downto 0 do
+    if m[i]='' then m.Delete(i);
+  sonuc01:=m[0];
+  sonuc02:=m[1];
+  sonuc03:=m[2];
+  sonuc04:=m[3];
+  sonuc05:=m[4];
+  sonuc06:=m[5];
+  sonuc07:=m[6];
+  sonuc08:=m[7];
+  sonuc09:=m[8];
+  sonuc10:=m[9];
+end;
+
+constructor TSetup.Create;
+begin
+  inherited;
+  m := TStringList.Create;
+  //
+end;
+
+destructor TSetup.Destroy;
+begin
+  m.Free;
+  inherited;
+  //
+end;
+
+procedure TSetup.esit;
+var
+I:Integer;
+begin
+  temiz;
+    m.Clear;
+  m.Delimiter := '=';
+  m.StrictDelimiter := True;
+  m.DelimitedText := yazi;
+  for I := m.Count-1 downto 0 do
+    if m[i]='' then m.Delete(i);
+  sonuc01:=m[0];
+  sonuc02:=m[1];
+  sonuc03:=m[2];
+  sonuc04:=m[3];
+  sonuc05:=m[4];
+  sonuc06:=m[5];
+  
+end;
+
+procedure TSetup.noktavirgul;
+var
+  rowtrmed: string;
+begin
+  temiz;
+  rowtrmed := Copy(yazi, 0, Pos(';', yazi) - 1);
+  sonuc01 :=Trim(LowerCase(rowtrmed));
+  sonuc02 := Copy(yazi, Pos(';', yazi), Length(yazi));
+end;
+
+procedure TSetup.temiz;
+begin
+  hataflag := False;
+  sonuc01 := '';
+  sonuc02 := '';
+  sonuc03 := '';
+  sonuc04 := '';
+  sonuc05 := '';
+  sonuc06 := '';
+  sonuc07 := '';
+  sonuc08 := '';
+  sonuc09 := '';
+  sonuc10 := '';
+  sonuc11 := '';
+  sonuc12 := '';
+  sonuc13 := '';
+  sonuc14 := '';
+  sonuc15 := '';
+  sonuc16 := '';
+  sonuc17 := '';
+  sonuc18 := '';
+  sonuc19 := '';
+  sonuc20 := '';
+  sonuc21 := '';
+  sonuc22 := '';
+  sonuc23 := '';
+  sonuc24 := '';
+  sonuc25 := '';
+  sonuc26 := '';
+  sonuc27 := '';
+  sonuc28 := '';
+  sonuc29 := '';
+  sonuc30 := '';
+  sonuc31 := '';
+  sonuc32 := '';
+  stre:='';
+end;
+
+procedure TSetup.yolkontrolayar;
+begin
+  { TODO -oEyüp -cCategory : unix ve windows sisteme göre yollar ayarlanmalý }
+  { TODO -oEyüp -cCategory : yol folderý programfile yazma problemi yüzünden ileride deðiþtirlmeli }
+  { TODO -oEyüp -cCategory : exe kenarýnda duracaklar ve durmayacaklar belirlenmeli }
+  // unix windows sisteme göre / karakteri ayarlnmalý
+  yol := ExtractFilePath(Application.ExeName);
+  ktpyol := yol + 'ktp';
+  lcdyol := ktpyol + '\lcd';
+  deryol := yol + 'der';
+  ortakyol := deryol + '\ortak';
+  mcrsyol := yol + 'mcrs';
+  mcrsyyol := yol + 'mcrsy';
+  if not DirectoryExists(ktpyol) then
+    MkDir(ktpyol);
+  if not DirectoryExists(lcdyol) then
+    MkDir(lcdyol);
+  if not DirectoryExists(deryol) then
+    MkDir(deryol);
+  if not DirectoryExists(ortakyol) then
+    MkDir(ortakyol);
+  if not DirectoryExists(mcrsyol) then
+    MkDir(mcrsyol);
+  if not DirectoryExists(mcrsyyol) then
+    MkDir(mcrsyyol);
+  if not FileExists(yol + 'sondosya.txt') then
+  begin
+    AssignFile(sondosya, yol + 'sondosya.txt');
+    Rewrite(sondosya);
+    CloseFile(sondosya);
+  end;
+  { TODO -oEyüp -cCategory : der\ortak içindeki macrolar.asm, pin, komut }
+  { TODO -oEyüp -cCategory : ktp\lcd içindeki macro.asm, pin,komut }
+end;
+
+end.

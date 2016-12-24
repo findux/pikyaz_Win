@@ -1,0 +1,27 @@
+ekle lcd
+  ; pinlerlcd(lcdport,d7,d6,d5,d4,e,rs)
+ekle hcsr4
+  ; pinlerhcsr4(hcsr4port,eko,trig)
+;// Pikyaz PİC  Programlama  //3
+  deg ab
+ pinlerhcsr4(PORTC,1,2)
+ pinlerlcd(LATA,3,2,1,0,4,5)
+ kod ayar(){
+            lcdgiris  
+  bekle 1000
+   }
+kod bas(){
+  lcdsil
+  hcsr4olc  ab
+  lcdbas ab
+  bekle 1000
+ 
+  }
+kod kesme1(){
+ 
+ 
+  }
+kod kesme2(){
+ 
+ 
+  }

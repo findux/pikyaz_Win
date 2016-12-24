@@ -1,0 +1,17 @@
+﻿     ekle glcd
+     pinlerglcd(LATB,LATA,0,1)
+kod ayar(){
+     glcdgiris
+     bekle 1000
+     }
+kod bas(){
+     glcdkonum 1,0
+     glcdyaz ABCDEFGHIJKLMNOP
+     glcdkonum 2,0
+     glcdyaz RSTUVYZ<>!^+%&# 
+     glcdkonum 3,0
+     glcdyaz /()?_-~.:|*,$[]
+     glcdkonum 4,0
+     glcdyaz abcdefghijklmnop
+     bekle 5000
+     }

@@ -1,0 +1,30 @@
+   ;kesme yok
+--  ; pin tanımları  
+pinlerhcsr4(hcsr4port,eko,trig)   ; pin isimleri
+eko g
+trig c
+
+#define BAUD 9600				; baud rate
+#define XTAL 20					; crystal freq in MHz
+#define X ((XTAL*1000000)/(BAUD*64))-1
+            
+/  ; değişkenler
+ ind,
+ msgNo, 
+ temp, 
+ cnt			; local variables
+ cmd,
+ crc			; MMC command and CRC7 check
+ arg:4			; MMC command argument
+ resp	
+
+
+++  ;  ayarlama kodları.. 
+movlw 49 
+movwf T1CON
+bsf             T1CON,5
+BSF             T1CON,4
+BCF             T1CON,6
+BSF             T1CON,7
+BSF             T1CON,T1SYNC
+bsf             T1CON,TMR1ON

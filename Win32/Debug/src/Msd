@@ -1,0 +1,184 @@
+
+ 
+ ; Macro for SPI litera 
+ SPI_L  macro dataToSend
+     MOVLW  dataToSend             ; move dataToSend into w  
+     call SPImacro  
+     endm
+ 
+ ;Macro for SPI variable
+ SPI_F  macro dataToSend
+     MOVFW  dataToSend
+     call SPImacro  
+     endm
+ 
+ ; Chek response R1 , if ok w == 0, if not ok w == 01
+ CHK_R1  macro r1 
+     MOVLW  r1
+     call Chk_R1
+     endm
+ 
+ SELECT_MMC macro
+     BCF    MMC_CS
+     endm
+ 
+ DESELECT_MMC macro
+     BSF    MMC_CS
+     endm
+ 
+ NCR   macro
+     SPI_L 0xFF 
+     endm
+ 
+ 
+ ; This macro uses function MMC_Send_Cmd. Cmd and CRC are literas, and adresses Adr1 - Adr4 are literas.
+ MMC_SEND_CMD_L  macro Cmd, Adr1, Adr2, Adr3, Adr4, CRC, CMD_Response
+ 
+     movlw  Cmd
+     movwf  MMC_Cmd
+ 
+     movlw  Adr1
+     movwf AdrByte1
+ 
+     movlw  Adr2
+     movwf AdrByte2
+ 
+     movlw  Adr3
+     movwf AdrByte3
+ 
+     movlw  Adr4
+     movwf AdrByte4
+ 
+     movlw  CRC
+     movwf MMC_CRC
+ 
+     movlw  CMD_Response
+     movwf MMC_Response
+ 
+     call MMC_Send_Cmd
+ 
+     endm
+ ;------------------------------------------------------------------
+ 
+ ;  Sends specified command
+ MMC_Send_Cmd
+   
+   SPI_F MMC_Cmd
+    SPI_F AdrByte1
+    SPI_F AdrByte2
+    SPI_F AdrByte3
+    SPI_F AdrByte4
+    SPI_F MMC_CRC
+ 
+     NCR
+ 
+   movfw MMC_Response
+   CALL Chk_R1
+ 
+   skpz
+   goto MMC_Send_Cmd
+   RETURN
+ 
+ mmc_init  
+ 
+   DESELECT_MMC
+ 
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+    SPI_L 0xFF
+ 
+   SELECT_MMC  
+ 
+   MMC_SEND_CMD_L 0x40, 0x00, 0x00, 0x00, 0x00, 0x95, 0x01
+ 
+   MMC_SEND_CMD_L 0x41, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00
+ 
+   DESELECT_MMC
+ 
+   RETURN
+ 
+ 
+ 
+ ; Check response R1, if ERROR return 0x01 in W, if Ok return 0x00 in W
+ Chk_R1 
+   MOVWF response
+   SPI_L 0xFF
+ 
+   MOVF  response, 0  
+    XORWF  SPI_Data, w
+    BTFSC  STATUS, Z
+    RETLW  0x00 ; OK
+ 
+ ;   Idle_State
+   BTFSC  SPI_Data, 0 
+   RETLW  0x01 ; OK;   GOTO  Idle_State_error
+ 
+ ;  Erase_Reset
+   BTFSC  SPI_Data, 1 
+   GOTO  Erase_Reset_Error
+ 
+ ;  Illegal_Command_Error
+   BTFSC  SPI_Data, 2 
+   GOTO  Illegal_Command_Error
+ 
+ ;  Com_CRC_Error
+   BTFSC  SPI_Data, 3 
+   GOTO  Com_CRC_Error
+ 
+ ;  Erase_Seq_Error
+   BTFSC  SPI_Data, 4 
+   GOTO  Erase_Seq_Error
+ 
+ ;  Address_Error
+   BTFSC  SPI_Data, 5 
+   GOTO    Address_Error
+ 
+ ;  Parameter_Error
+   BTFSC  SPI_Data, 6
+   GOTO  Parameter_Error
+   goto Ondefined_ERROR ;RETLW  0x80 ; OK
+ 
+ 
+ ; Send the value of SPI_Data, reseive the data to the SPI_Data
+ SPI_Out
+    MOVF  SPI_Data, w             ; move SPI_Data into w
+ SPImacro
+    MOVWF  SSPBUF                  ; place data in send buffer
+ SPI_Out_2
+    BTFSS  SSPSTAT,BF              ; has data been received?
+    GOTO  SPI_Out_2               ; loop if not received yet
+ 
+    MOVF  SSPBUF,W                ; empty the receive buffer
+    MOVWF  SPI_Data            ; put received byte into rxdata
+    RETURN
+ 
+ MMC_Configuration macro
+ ; Set up the SPI Support
+   BANKSEL TRISA   ; BANK 1
+   movlw 0x00     ; Set PORTA as
+   movwf TRISA   ; all Outputs
+   movlw 0x06     ; Turn off A/D
+   movwf ADCON1   ; so PORTA can be used
+    
+ Setup_SPI  
+   BANKSEL TRISC
+   MOVLW  b'00010000'    ;b'11010100'   ;Set portc for using USART + MSSP, c0 and c1 for the decoder chip, and c2 for DREQ
+    MOVWF  TRISC
+ 
+     CLRF  SSPSTAT    ;clear SSP status register
+    MOVLW  0x80    ;set up spi port, SPI master,
+    MOVWF  SSPSTAT    ;cke = 0 (mode 1,1)
+   
+   CLRF  SSPCON    ;clear SSP control register
+    MOVLW  0x32    ;set up spi port, SPI master,
+    MOVWF  SSPCON    ;clk/64, ckp=1 (mode 1,1)
+   BANKSEL PORTA 
+   endm
+   

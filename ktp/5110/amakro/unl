@@ -1,0 +1,9 @@
+_unlunl    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'10111111'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    endm

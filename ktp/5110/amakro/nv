@@ -1,0 +1,9 @@
+_nvnv    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'01000000'
+    _datayaz   b'00110110'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    endm

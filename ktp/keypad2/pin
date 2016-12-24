@@ -1,0 +1,23 @@
+
+   ;kesme var
+kesmeb47
+--  ; pin tanımları  
+pinlerkeypad(keylat,keyport,y1,y2,y3,y4,a1,a2,a3,a4)   ; pin isimleri
+
+LATB
+PORTB
+y1 g
+y2 g
+y3 g
+y4 g
+a1 c
+a2 c
+a3 c
+a4 c
+
+/  ; değişkenler
+
+rows
+tus
+
+++  ;  ayarlama kodları..

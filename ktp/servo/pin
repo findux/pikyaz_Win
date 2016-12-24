@@ -1,0 +1,8 @@
+   ;kesme yok
+--  ; pin tanımları 
+pinlerservo(srvport,srv1)   ; pin isimleri
+srv1 c
+
+/
+
+++  ;  ayarlama kodları..

@@ -1,0 +1,411 @@
+
+;********************************** Matematik İşlemler**************************************
+;{
+;*** 32 Bit İşaretli çıkarma ***
+;REGA - REGB -> REGA
+
+cikarma
+    call    negateb     ; REGB - olacak.
+    btfsc STATUS,C                ; STATUS C biti 0  mı değilse toplama REGA+(-REGB)
+    return          ;uçtu dön.
+
+;*** 32 BIT İşaretli Toplama ***
+;REGA + REGB -> REGA
+
+toplama
+    movf    REGA3,w     ;İşaretleri kontrol et.
+    xorwf   REGB3,w
+    movwf   MTEMP
+
+    call    addba       ;REGA= REGB + REGA
+
+    bcf STATUS,C            ;
+    movf    REGB3,w     ;If signs are same
+    xorwf   REGA3,w     ;so must result sign
+    btfss   MTEMP,7     ;else overflow
+    addlw   0x80
+    return
+
+carpma
+  clrf  MTEMP    ;İşareti temizle.
+  call  absa    ;REGA yı pozitif yap
+  btfss STATUS,C
+  call  absb    ;REGB yı pozitif yap
+  btfsc STATUS,C
+  return      ;uçtu...dön
+
+  call  movac    ; REGA = REGC
+  call  clrrega    ;REGA = 0
+
+  movlw  D'31'    ;işlenecek bit sayısı
+  movwf  MCOUNT
+
+muloop
+  call  slac    ;REGA  REGC  kaydır
+  rlcf  REGC3,w    ;REGC3 kayınca 
+  btfsc STATUS,C      ;STATUS C biti 0  mı(1 se çarpan 1 dir)
+  call  addba    ;0 değil  REGA + REGB
+
+  btfss STATUS,C      ;toplanınca STATUS C biti 1 oluyor mu
+  rlcf  REGA3,w  ; evet REGA3 ü bir kaydır 
+  btfsc STATUS,C      ; STATUS C biti 0  mı
+  return   ; evet iş bitti  dön.
+
+  decfsz  MCOUNT,f  ;hayır diğer bit.
+  goto  muloop
+
+  btfsc  MTEMP,0    ;Check result sign
+  call  negatea    ;Negative
+  return
+
+bolme
+  clrf  MTEMP    ;Reset sign flag
+  movf  REGB0,w    ;Trap division by zero
+  iorwf  REGB1,w
+  iorwf  REGB2,w
+  iorwf  REGB3,w
+  sublw  0   ; REGB - 0 
+  btfss STATUS,C         ; STATUS C biti 1  mı
+  call  absa    ;evet REGA yı positif yap
+  btfss STATUS,C         ; STATUS C biti 1  mı
+  call  absb    ;evet REGB yı positif yap
+  btfsc STATUS,C         ; STATUS C biti 0  sa
+  return      ; uçtu ... dön
+
+  clrf  REGC0    ;REGC yi temizle
+  clrf  REGC1
+  clrf  REGC2
+  clrf  REGC3
+  call  slac    ;REGA  REGC  kaydır
+
+  movlw  D'31'    ;Loop counter
+  movwf  MCOUNT
+
+dvloop
+  call  slac    ;REGA  REGC  kaydır
+
+  movf  REGB3,w    ;Test if remainder (REGC) >= divisor (REGB)
+  subwf  REGC3,w
+  btfss STATUS,Z
+  goto  dtstgt
+  movf  REGB2,w
+  subwf  REGC2,w
+  btfss STATUS,Z
+  goto  dtstgt
+  movf  REGB1,w
+  subwf  REGC1,w
+  btfss STATUS,Z
+  goto  dtstgt
+  movf  REGB0,w
+  subwf  REGC0,w
+dtstgt
+  btfss STATUS,C      ;Carry set if remainder >= divisor
+  goto  dremlt
+  movf  REGB0,w    ;Subtract divisor (REGB) from remainder (REGC)
+  subwf  REGC0,f
+  movf  REGB1,w
+  btfss STATUS,C
+  incfsz  REGB1,w
+  subwf  REGC1,f
+  movf  REGB2,w
+  btfss STATUS,C
+  incfsz  REGB2,w
+  subwf  REGC2,f
+  movf  REGB3,w
+  btfss STATUS,C
+  incfsz  REGB3,w
+  subwf  REGC3,f
+  bcf STATUS,C
+  bsf  REGA0,0    ;Set quotient bit
+
+dremlt  decfsz  MCOUNT,f  ;Next
+  goto  dvloop
+  btfsc  MTEMP,0    ;Check result sign
+  call  negatea    ;Negative
+  return
+
+round
+  clrf  MTEMP    ;Reset sign flag
+  call  absa    ;Make positive
+  bcf STATUS,C
+  call  slc    ;Multiply remainder by 2
+  movf  REGB3,w    ;Test if remainder (REGC) >= divisor (REGB)
+  subwf  REGC3,w
+  btfss STATUS,Z
+  goto  rtstgt
+  movf  REGB2,w
+  subwf  REGC2,w
+  btfss STATUS,Z
+  goto  dtstgt
+  movf  REGB1,w
+  subwf  REGC1,w
+  btfss STATUS,Z
+  goto  rtstgt
+  movf  REGB0,w
+  subwf  REGC0,w
+rtstgt
+  btfss STATUS,C      ;Carry set if remainder >= divisor
+  goto  rremlt
+  incfsz  REGA0,f    ;Add 1 to quotient
+  goto  rremlt
+  incfsz  REGA1,f
+  goto  rremlt
+  incfsz  REGA2,f
+  goto  rremlt
+  incf  REGA3,f
+  btfsc  STATUS,Z
+  return      ;Overflow,return carry set
+rremlt
+  btfsc  MTEMP,0    ;Restore sign
+  call  negatea
+  return
+
+kok
+  rlcf  REGA3,w    ;Trap negative values
+  btfsc STATUS,C
+  return
+  call  movac    ;Move REGA to REGC
+  temizle REGA0    ;Clear remainder (REGB) and root (REGA)
+  temizle REGB0
+  movlw  D'16'    ;Loop counter
+  movwf  MCOUNT
+
+sqloop
+  rlcf  REGC0,f    ;Shift two msb's
+  rlcf  REGC1,f    ;into remainder
+  rlcf  REGC2,f
+  rlcf  REGC3,f
+  rlcf  REGB0,f
+  rlcf  REGB1,f
+  rlcf  REGB2,f
+  rlcf  REGC0,f
+  rlcf  REGC1,f
+  rlcf  REGC2,f
+  rlcf  REGC3,f
+  rlcf  REGB0,f
+  rlcf  REGB1,f
+  rlcf  REGB2,f
+
+  setc      ;Add 1 to root
+  rlcf  REGA0,f    ;Align root
+  rlcf  REGA1,f
+  rlcf  REGA2,f
+
+  movf  REGA2,w    ;Test if remdr (REGB) >= root (REGA)
+  subwf  REGB2,w
+  btfss STATUS,Z
+  goto  ststgt
+  movf  REGA1,w
+  subwf  REGB1,w
+  btfss STATUS,Z
+  goto  ststgt
+  movf  REGA0,w
+  subwf  REGB0,w
+ststgt  btfss STATUS,C      ;Carry set if remdr >= root
+  goto  sremlt
+
+  movf  REGA0,w    ;Subtract root (REGA) from remdr (REGB)
+  subwf  REGB0,f
+  movf  REGA1,w
+  btfss STATUS,C
+  incfsz  REGA1,w
+  subwf  REGB1,f
+  movf  REGA2,w
+  btfss STATUS,C
+  incfsz  REGA2,w
+  subwf  REGB2,f
+  bsf  REGA0,1    ;Set current root bit
+
+sremlt  bcf  REGA0,0    ;Clear test bit
+  decfsz  MCOUNT,f  ;Next
+  goto  sqloop
+
+  bcf STATUS,C
+  rrcf  REGA2,f    ;Adjust root alignment
+  rrcf  REGA1,f
+  rrcf  REGA0,f
+  return
+
+addba   ;  REGA + REGB
+  movf  REGB0,w    ;Add lo byte
+  addwf  REGA0,f
+  movf  REGB1,w    ;Add mid-lo byte
+  btfsc STATUS,C      ;No carry_in, so just add
+  incfsz  REGB1,w    ;Add carry_in to REGB
+  addwf  REGA1,f    ;Add and propagate carry_out
+  movf  REGB2,w    ;Add mid-hi byte
+  btfsc STATUS,C
+  incfsz  REGB2,w
+  addwf  REGA2,f
+  movf  REGB3,w    ;Add hi byte
+  btfsc STATUS,C
+  incfsz  REGB3,w
+  addwf  REGA3,f
+  return
+
+movac
+  movf  REGA0,w
+  movwf  REGC0
+  movf  REGA1,w
+  movwf  REGC1
+  movf  REGA2,w
+  movwf  REGC2
+  movf  REGA3,w
+  movwf  REGC3
+  return
+movbc
+  movf  REGB0,w
+  movwf  REGC0
+  movf  REGB1,w
+  movwf  REGC1
+  movf  REGB2,w
+  movwf  REGC2
+  movf  REGB3,w
+  movwf  REGC3
+  return
+movab
+  movf  REGA0,w
+  movwf  REGB0
+  movf  REGA1,w
+  movwf  REGB1
+  movf  REGA2,w
+  movwf  REGB2
+  movf  REGA3,w
+  movwf  REGB3
+  return
+
+movba
+  movf REGB0  ; B=>A
+  movwf REGA0
+  movf REGB1
+  movwf REGA1
+  movf REGB2
+  movwf REGA2
+  movf REGB3
+  movwf REGA3
+  
+clrregb
+  clrf  REGB0
+  clrf  REGB1
+  clrf  REGB2
+  clrf  REGB3
+  return
+
+clrrega
+  clrf  REGA0
+  clrf  REGA1
+  clrf  REGA2
+  clrf  REGA3
+  return
+
+absa
+  rlcf  REGA3,w
+  btfss STATUS,C
+  return      ;Pozitive
+negatea
+  movf  REGA3,w    ;Save sign in w
+  andlw  0x80
+  comf  REGA0,f    ;2's complement
+  comf  REGA1,f
+  comf  REGA2,f
+  comf  REGA3,f
+  incfsz  REGA0,f
+  goto  nega1
+  incfsz  REGA1,f
+  goto  nega1
+  incfsz  REGA2,f
+  goto  nega1
+  incf  REGA3,f
+nega1
+  incf  MTEMP,f    ;flip sign flag
+  addwf  REGA3,w    ;Return carry set if -2147483648
+  return
+
+__degis
+  CALL movac  ; A=>C
+  call movba   ; B=>A
+  movf REGC0  ; C=>B
+  movwf REGB0
+  movf REGC1
+  movwf REGB1
+  movf REGC2
+  movwf REGB2
+  movf REGC3
+  movwf REGB3
+  return
+  
+absb
+  rlcf  REGB3,w
+  btfss STATUS,C
+  return      ;Positive
+negateb
+  movf  REGB3,w    ;Save sign in w
+  andlw  0x80
+  comf  REGB0,f    ;2's complement
+  comf  REGB1,f
+  comf  REGB2,f
+  comf  REGB3,f
+  incfsz  REGB0,f
+  goto  negb1
+  incfsz  REGB1,f
+  goto  negb1
+  incfsz  REGB2,f
+  goto  negb1
+  incf  REGB3,f
+negb1
+  incf  MTEMP,f    ;flip sign flag
+  addwf  REGB3,w    ;Return carry set if -2147483648
+  return
+
+slac
+  rlcf  REGA0,f
+  rlcf  REGA1,f
+  rlcf  REGA2,f
+  rlcf  REGA3,f
+slc
+  rlcf  REGC0,f
+  rlcf  REGC1,f
+  rlcf  REGC2,f
+  rlcf  REGC3,f
+  return
+
+clrdig
+    clrf  DSIGN
+    clrf  DIGIT1
+    clrf  DIGIT2
+    clrf  DIGIT3
+    clrf  DIGIT4
+    clrf  DIGIT5
+    clrf  DIGIT6
+    clrf  DIGIT7
+    clrf  DIGIT8
+    clrf  DIGIT9
+    clrf  DIGIT10
+    clrf REGB3
+    clrf REGB2
+    clrf REGB1
+    clrf REGB0
+    clrf key
+    clrf  bey
+    clrf  OUT
+    clrf  dgdeg
+    return
+
+Key_Table    ADDWF   PCL       , f
+              RETLW   'A'
+              RETLW   'B'
+              RETLW   'C'
+              RETLW   'D'
+              RETLW   'E'
+              RETLW   'F'
+              RETLW   'G'
+              RETLW   'H'
+              RETLW   'J'
+              RETLW   'K'
+              RETLW   'L'
+              RETLW   'M'
+              RETLW   'N'
+              RETLW   'O'
+              RETLW   'P'
+              RETLW   'R'
+              

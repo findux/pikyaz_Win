@@ -1,0 +1,32 @@
+﻿ekle lcd
+                    ; pinlerlcd(lcdport,rs,e,d7,d6,d5,d4)   ; pin isimleri
+                    ;// Picyaz PİC  Programlama  //
+   pinlerlcd(LATA,5,4,3,2,1,0) 
+                    ; PORTA 5.pin RS, 4.pin Enable,
+                    ; 0. pin data4, 1.pin data5,2. pin data4, 3.pin data5  e bağlanıyor..
+  DEG  ab          ; ab Değişkeni tanımlandı.
+  DEG  ac          ; ac Değişkeni tanımlandı.
+  DEG Dsonuc
+ kod ayar(){        ; ayarlama bölümü 
+         ac = 2        ; ac değişkenine 2 değeri verildi.
+         ab = 5         ; ab değişkeni 5 değeri verildi.
+        lcdgiris           ; lcd başlatma komutları
+   }
+kod bas(){          ; kodlar burada yazılacak...
+        lcdsil            ; lcdyi temizle..
+         Dsonuc = ab+ ac  ;değişkenler çarpılıyor ab + ac ..
+         lcdbas ab       ; ab değişkeni lcdye yazıldı.(değişkenler lcdbas komutuyla yazdırılır.) 
+         lcdyaz +         ; lcdye * işareti yazdırıldı.(değişken olmayanlar lcdyaz komutuyla yazdırılır.)
+         lcdbas ac       ; Dac değişkeni lcdye yazıldı.
+         lcdyaz =         ; lcdye = işareti yazdırıldı.
+         lcdkonum 2,0     ; lcd kursor 2.satıra taşındı.
+         lcdbas  Dsonuc   ;
+         ab = Dsonuc
+        bekle 9000
+  }
+  kod kesme1(){
+
+  }
+kod kesme2(){
+ 
+  }

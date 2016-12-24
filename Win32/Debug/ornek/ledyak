@@ -1,0 +1,17 @@
+﻿
+                    ;// Picyaz PİC  Programlama  //
+ kod ayar(){        ; ayarlama bölümü 
+        pin10=c           ; B0 çıkış
+   }
+kod bas(){          ; kodlar burada yazılacak...
+        pin10=1         ; B0 çıkışına 5v verildi.
+        bekle 10000       ; 1 saniye bekle 
+        pin10=0         ; B0 çıkışı 0 volt.
+        bekle 10000       ; 1 saniye bekle 
+  }
+ kod kesme1(){
+
+  }
+kod kesme2(){
+ 
+  }

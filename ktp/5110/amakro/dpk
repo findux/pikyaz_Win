@@ -1,0 +1,9 @@
+_dpkdpk    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'10000100'
+    _datayaz   b'11111100'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    endm

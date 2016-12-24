@@ -1,0 +1,9 @@
+_utrnutrn    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000010'
+    _datayaz   b'00001110'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    endm

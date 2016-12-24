@@ -1,0 +1,7 @@
+    ; makro olarak tanımlanmış ve kullanıcının kullanabileceği makro adları burada listelenir. 
+    ; noktalı virgülden sonra o komutun kullanımı ile ilgili açıklama yazılması tavsiye edilir. 
+    ; komut adlarndırmada kullanıcının kolay kullanabileceği fakat değişken olarak kullanılmamaış olması önemlidir. 
+
+komut1       ; açıklama = bu komuttan sonra değişken gelmelidir. değişkene sonuç yüklenir vs. vs.  ....  
+komut2      ; bu komuttan sonra bir sayı gelmelidir. vs. vs.  .....
+komut3      ; bu komut bekleme komutudur .... gibi.

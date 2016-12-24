@@ -1,0 +1,9 @@
+_bolbol    macro
+    _datayaz   b'00000000'
+    _datayaz   b'00000000'
+    _datayaz   b'11000000'
+    _datayaz   b'00110000'
+    _datayaz   b'00001100'
+    _datayaz   b'00000010'
+    _datayaz   b'00000000'
+    endm

@@ -1,0 +1,9 @@
+_ss    macro
+    _datayaz   b'00000000'
+    _datayaz   b'10010000'
+    _datayaz   b'10101000'
+    _datayaz   b'10101000'
+    _datayaz   b'10101000'
+    _datayaz   b'01001000'
+    _datayaz   b'00000000'
+    endm

@@ -1,0 +1,9 @@
+_atreatre    macro
+    _datayaz   b'00000000'
+    _datayaz   b'10000000'
+    _datayaz   b'10000000'
+    _datayaz   b'10000000'
+    _datayaz   b'10000000'
+    _datayaz   b'10000000'
+    _datayaz   b'00000000'
+    endm

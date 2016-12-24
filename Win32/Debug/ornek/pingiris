@@ -1,0 +1,18 @@
+﻿;// Pikyaz PİC  Programlama  //
+ kod ayar(){
+      pin20=c  ; pin20/c0 çıkış
+      pin21=g  ; pin21/c1 giriş
+   }
+kod bas(){
+      test pin21 1  ; pin21/c1 1 mi
+      pin20=1       ; pin20/c0 ı 1 yap
+      değilse       ; değilse (pin21/c1 0)
+      pin20=0       ; pin20 yi 0 yap
+      tson          ; test sonu...
+  }
+  kod kesme1(){
+
+  }
+kod kesme2(){
+ 
+  }

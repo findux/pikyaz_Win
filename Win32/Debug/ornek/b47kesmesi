@@ -1,0 +1,23 @@
+﻿ekle lcd
+                    ; pinlerlcd(lcdport,rs,e,d7,d6,d5,d4)   ; pin isimleri
+                    ;// Picyaz PİC  Programlama  //
+   pinlerlcd(LATA,5,4,3,2,1,0) 
+   deg ab
+ kod ayar(){        ; ayarlama bölümü 
+   kesmeb47
+        lcdgiris           ; lcd başlatma komutları
+        bekle 1000
+   }
+kod bas(){          ; kodlar burada yazılacak...
+        lcdsil            ; lcdyi temizle..
+        lcdbas ab
+          bekle 10000
+  }
+  kod kesme1(){
+    artir ab
+    bekle 4000
+  }
+kod kesme2(){
+    artir ab
+    bekle 4000
+  }
