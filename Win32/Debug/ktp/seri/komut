@@ -1,0 +1,3 @@
+seriyaz  ; seriyaz 'C'      / bir sabiti seri porta gönderir.
+serioku  ;serioku değişken  / seri gelen bilgiyi değişkene yazar
+seribas ; seribas değişken  / bir değişkeni seri porta gönderir. 

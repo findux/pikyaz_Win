@@ -1,4 +1,4 @@
-_CC    macro
+_cc    macro
     _datayaz   b'00000000'
     _datayaz   b'00111100'
     _datayaz   b'01000010'

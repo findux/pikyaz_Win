@@ -1,5 +1,4 @@
-
-hcsr4olc macro deg
+hcsr4olc macro deg,deg2
           CLRF    	TMR1H      ;ZERA TIMER 1 H /L
           CLRF    	TMR1L
           BCF     	PIR1,TMR1IF     ;APAGA FLAG TMR1
@@ -22,7 +21,7 @@ hcsr4olc macro deg
           MOVWF 	REGB0
           CALL 		bolme
           yukle 	REGA0,deg
-          bekle 1000
+          bekle 100
           CLRF    	TMR1H      ;ZERA TIMER 1 H /L
           CLRF    	TMR1L
           BCF     	PIR1,TMR1IF     ;APAGA FLAG TMR1
@@ -44,5 +43,5 @@ hcsr4olc macro deg
           MOVLW  	.150
           MOVWF 	REGB0
           CALL 		bolme
-          yukle 	REGA0,hc2
+          yukle 	REGA0,deg2
           endm

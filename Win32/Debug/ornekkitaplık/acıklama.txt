@@ -3,7 +3,8 @@
 2-) her kitaplıkta 
       pin isimli bir dosya 
       makro isimli bir dosya
-      komut isimli bir dosya bulunur. 
+      komut isimli bir dosya . 
+      en az bir adet örnek dosya bulunur. örnek dosya adı ".pik" uzantılı olmalıdır. 
   
 3-) her dosyanın içinde hangi bilgiler bulunacağı o dosya içinde açıklanmıştır.
 4-) dosyalar hazırlandıktan sonra klasör tar.gz formatında sıkıştırılır. 

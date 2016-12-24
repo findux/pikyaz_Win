@@ -1,0 +1,12 @@
+--
+/  ; değişkenler
+++ ;  ayarlama kodları..
+  
+  bcf  TRISC,6 
+  bcf  TRISC,7
+  movlw 88
+  movwf SPBRG
+  movlw   b'10010000'
+  movwf RCSTA
+  movlw b'00100100'
+  movwf  TXSTA

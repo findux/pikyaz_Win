@@ -1,0 +1,34 @@
+ekle ortak
+ekle lcd ktp
+
+ekle  picayar-ktb
+ekle  glcd-ktb
+ekle  ksensor-ktb
+keypad (b  4,3,2,1,0,8,7,6,5)
+DAT    EQU  h'71'
+#define  _C  STATUS,0
+pin Equ LATA
+lcd(a ,5,4,3,2,1,0)
+
+deg ab
+deg cb
+deg dd
+
+kod ayar(){
+	trisc = B'0011001100'
+	trısb = 125
+	glcd.port = LATB
+	glcd.rs = c
+	glcd.en= c
+	ksensor.pin= A1
+	glcdgiris()
+	lcd3bas ab
+
+ }
+
+kod bas(){
+	glcdkomut(0x080)
+	bekle(1000)
+	glcdveri(22)
+	testsensor() 
+  }   

@@ -1,9 +1,9 @@
 
-lcdsil  macro
+glcdsil  macro
     movlw     0x01      ; Clear display
     instw4
     endm
-lcdgiris macro 
+glcdgiris macro 
     bekle   20           ; Wait 15 msecs
     movlw   0x30              ; Send the Reset Instruction
     movwf   lcdport           ;
@@ -30,21 +30,21 @@ lcdgiris macro
     nop         ; Pulse LCD_E
     bekle   20
     movlw   0x028             ; Set Interface Length
-    instw4
+    glcdinstw4
     movlw   0x10              ; Turn Off Display
-    instw4
+    glcdinstw4
     movlw   0x001           ; Clear Display RAM
-    instw4
+    glcdinstw4
     movlw   0x6             ; Set Cursor Movement
-    instw4
+    glcdinstw4
     movlw   0xC             ; Turn on Display/Cursor
-    instw4
-    LCD_Clr        ; Clear the LCD
+    glcdinstw4
+    gLCD_Clr        ; Clear the LCD
     movlw ' '
-    LCD_Char
-    lcdsil
+    gLCD_Char
+    glcdsil
     endm
-instw4 macro
+glcdinstw4 macro
     movwf   LCDTemp           ;Temp storage
     swapf   LCDTemp,1
     movf    LCDTemp,0         ;Now W also holds the data
@@ -64,11 +64,11 @@ instw4 macro
     bcf     lcdport, e   ;end of lower nibble
     bekle     10
     endm
-LCD_CharD  macro
+gLCD_CharD  macro
     addlw     0x30            ; add 0x30 to convert to ASCII
     LCD_Char
     endm
-LCD_Char     macro 
+gLCD_Char     macro 
     movwf     LCDTemp
     swapf     LCDTemp,1
     movf      LCDTemp,0 
@@ -92,60 +92,63 @@ LCD_Char     macro
     nop 
     endm
 
-LCD_L1  macro
+gLCD_L1  macro
     movlw       0x80        ; move to 2nd row, first column
-    instw4
+    glcdinstw4
     endm
-LCD_L2  macro
+gLCD_L2  macro
     movlw       0xc0       ; move to 2nd row, first column
-    instw4
+    glcdinstw4
     endm
-LCD_Line1W  macro
+gLCD_Line1W  macro
     addlw       0x80      ;move to 1st row, column W
-    instw4
+    glcdinstw4
     endm
-LCD_Line2W  macro
+gLCD_Line2W  macro
     addlw       0xc0      ;move to 2nd row, column W
-    instw4
+    glcdinstw4
     endm
-LCD_L3  macro
+gLCD_L3  macro
     addlw       0x94        ; move to 2nd row, first column
-    instw4
+    glcdinstw4
     endm 
-LCD_L4  macro
+gLCD_L4  macro
     addlw       0xD4      ; move to 2nd row, first column
-    instw4
+    glcdinstw4
     endm
-kursorac  macro
+glcdkursorac  macro
     movlw       0x0d
-    instw4
+    glcdinstw4
     endm
-kursorkapa  macro
+glcdkursorkapa  macro
     movlw       0x0c
-    instw4
+    glcdinstw4
     endm
-LCD_Clr    macro
+gLCD_Clr    macro
     movlw       0x01      ; Clear display
-    instw4
+    glcdinstw4
     endm
-
-lcdyaz macro sayi
+harfyaz macro sayi
     movlw   sayi
-    LCD_Char
+    gLCD_Char
     endm
-lcddeg macro deg
+glcdyaz macro sayi
+    movlw   sayi
+    gLCD_Char
+    endm
+glcddeg macro deg
     movf   deg,0
-    LCD_Char
+    gLCD_Char
     endm
 
-lcdbas macro  deg
+glcdbas macro  deg
     yukle deg,REGA0
-    BIN2DEC
-    rakamyaz
+    glcdBIN2DEC
+    glcdrakamyaz
     endm
-BIN2DEC	macro  ;REGA=> onluk paket.... hex den paket bcd 
+glcdBIN2DEC	macro  ;REGA=> onluk paket.... hex den paket bcd 
 local B2bcd2,B2bcd3
-	clrdig
+	glcdclrdig
 	MOVLW	.32		; 32-BIT
 	MOVWF	key		; çevrim sayısı
 B2bcd2	LFSR	FSR0,DIGIT1		; başlangıç
@@ -175,7 +178,7 @@ B2bcd3	MOVLW	0X33
 	GOTO	B2bcd2		; hayır devamm...
 	endm		;
 
-kazi macro digit
+glcdkazi macro digit
 local kaz,kon
       btfsc  key,0
       goto kaz
@@ -188,67 +191,67 @@ kaz
 	swapf     digit,1
     movf      digit,0 
     andlw     0x0f
-      LCD_CharD
+      gLCD_CharD
 	swapf     digit, w
     andlw     0x0f
-	 LCD_CharD
+	 gLCD_CharD
 kon
 	endm
 
-rakamyaz macro
+glcdrakamyaz macro
       	clrf key
-	kazi DIGIT5
-	kazi DIGIT4
-	kazi DIGIT3
-	kazi DIGIT2
-	kazi DIGIT1
+	glcdkazi DIGIT5
+	glcdkazi DIGIT4
+	glcdkazi DIGIT3
+	glcdkazi DIGIT2
+	glcdkazi DIGIT1
       endm
     
-lcdkonum macro sayi1,sayi2
+glcdkonum macro sayi1,sayi2
       if (sayi1 == .1)
             movlw  sayi2
             addlw     0x80      ;move to 1st row, column W
-            instw4
+            glcdinstw4
       endif
       if (sayi1 == .2)
             movlw  sayi2
             addlw     0xc0      ;move to 2st row, column W
-            instw4
+            glcdinstw4
           endif
       if (sayi1 == .3)
             movlw  sayi2
             addlw     0x94       ;move to 3st row, column W
-            instw4
+            glcdinstw4
       endif
       if (sayi1 == .4)
             movlw  sayi2
             addlw     0xD4       ;move to 4st row, column W
-            instw4
+            glcdinstw4
       endif
     endm
-lcdkonum1 macro sayi1,deg2
+glcdkonum1 macro sayi1,deg2
       if (sayi1 == .1)
             movf  deg2,0
             addlw     0x80      ;move to 1st row, column W
-            instw4
+            glcdinstw4
       endif
       if (sayi1 == .2)
             movf  deg2,0
             addlw     0xc0      ;move to 2st row, column W
-            instw4
+            glcdinstw4
           endif
       if (sayi1 == .3)
             movf  deg2,0
             addlw     0x94       ;move to 3st row, column W
-            instw4
+            glcdinstw4
       endif
       if (sayi1 == .4)
             movf  deg2,0
             addlw     0xD4       ;move to 4st row, column W
-            instw4
+            glcdinstw4
       endif
     endm
-lcdkonum2 macro deg1,sayi2
+glcdkonum2 macro deg1,sayi2
 local ikk,ukk,dkk,son
       movf deg1,0
       xorlw  1
@@ -256,7 +259,7 @@ local ikk,ukk,dkk,son
       goto ikk
             movlw  sayi2
             addlw     0x80      ;move to 1st row, column W
-            instw4
+            glcdinstw4
             goto son
 ikk
      movf deg1,0
@@ -265,7 +268,7 @@ ikk
       goto ukk
             movlw  sayi2
             addlw     0xc0      ;move to 2st row, column W
-            instw4
+            glcdinstw4
           goto son
 ukk
      movf deg1,0
@@ -274,16 +277,16 @@ ukk
       goto dkk
             movlw  sayi2
             addlw     0x94       ;move to 3st row, column W
-            instw4
+            glcdinstw4
       goto son
 dkk
             movlw  sayi2
             addlw     0xD4       ;move to 4st row, column W
-            instw4
+            glcdinstw4
 son
     endm
     
-lcdkonum3 macro deg1,deg2
+glcdkonum3 macro deg1,deg2
 local ikk,ukk,dkk,son
       movf deg1,0
       xorlw  1
@@ -291,7 +294,7 @@ local ikk,ukk,dkk,son
       goto ikk
             movf  deg2,0
             addlw     0x80      ;move to 1st row, column W
-            instw4
+            glcdinstw4
             goto son
 ikk
      movf deg1,0
@@ -300,7 +303,7 @@ ikk
       goto ukk
             movf  deg2,0
             addlw     0xc0      ;move to 2st row, column W
-            instw4
+            glcdinstw4
           goto son
 ukk
      movf deg1,0
@@ -309,15 +312,15 @@ ukk
       goto dkk
             movf  deg2,0
             addlw     0x94       ;move to 3st row, column W
-            instw4
+            glcdinstw4
       goto son
 dkk
             movf  deg2,0
             addlw     0xD4       ;move to 4st row, column W
-            instw4
+            glcdinstw4
 son
     endm    
-clrdig macro
+glcdclrdig macro
     clrf    DSIGN
     clrf    DIGIT1
     clrf    DIGIT2

@@ -3,7 +3,7 @@ ekle dcmotor
 ekle lcd
                     ; pinlerlcd(lcdport,d7,d6,d5,d4,e,rs)   ; pin isimleri
                     ;// Picyaz PİC  Programlama  //
-   pinlerlcd(LATA,5,4,3,2,1,0)
+   pinlerlcd(LATA,3,2,1,0,4,5) 
    pinlerdcmotor(LATC,1,2)  
                     ; PORTA 5.pin RS, 4.pin Enable,
       deg ab              ; 0. pin data4, 1.pin data5,2. pin data4, 3.pin data5  e bağlanıyor..

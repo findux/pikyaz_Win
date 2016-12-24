@@ -1,33 +1,34 @@
-
+   variable  rsmii
+   variable  ydk
 lcdsil  macro
     movlw     0x01      ; Clear display
     instw4
     endm
 lcdgiris macro 
     bekle   20           ; Wait 15 msecs
-    movlw   0x30              ; Send the Reset Instruction
+    movlw   0x03              ; Send the Reset Instruction
     movwf   lcdport           ;
-    bsf     lcdport, e
-    nop
-    bcf     lcdport, e
-    nop        ; Pulse LCD_E
-    bekle   20
-    bsf     lcdport, e
-    nop
-    bcf     lcdport, e
-    nop        ; Pulse LCD_E
-    bekle   20
-    bsf     lcdport, e
-    nop
-    bcf     lcdport, e
+     bsf         lcdport, e 
+    nop  
+    bcf         lcdport, e
     nop            ; Pulse LCD_E
     bekle   20
-    movlw   0x10                  ; Send the Data Length Specification
+     bsf         lcdport, e 
+    nop  
+    bcf         lcdport, e
+    nop            ; Pulse LCD_E
+    bekle   20
+     bsf         lcdport, e 
+    nop  
+    bcf         lcdport, e
+    nop              ; Pulse LCD_E
+    bekle   20
+    movlw   0x01                  ; Send the Data Length Specification
     movwf   lcdport              ;
-    bsf     lcdport, e
-    nop
-    bcf     lcdport, e
-    nop         ; Pulse LCD_E
+     bsf         lcdport, e 
+    nop  
+    bcf         lcdport, e
+    nop              ; Pulse LCD_E
     bekle   20
     movlw   0x028             ; Set Interface Length
     instw4
@@ -46,23 +47,23 @@ lcdgiris macro
     endm
 instw4 macro
     movwf   LCDTemp           ;Temp storage
-    swapf   LCDTemp,1
+    ;swapf   LCDTemp,1
     movf    LCDTemp,0         ;Now W also holds the data
-    andlw   b'00001111'       ; get upper nibble
+    andlw   0xf0       ; get upper nibble
     movwf   lcdport         ; send data to lcd
     bcf     lcdport, rs
     bsf     lcdport, e
-    nop
+    bekle 20
     bcf     lcdport, e
-    nop
+    bekle 20
     swapf   LCDTemp,0         ;get lower nibble to W
-    andlw   b'00001111'
+    andlw   0xf0
     movwf   lcdport         ;Write to LCD
     bcf     lcdport, rs
     bsf     lcdport, e
-    nop   
+    bekle 20    
     bcf     lcdport, e   ;end of lower nibble
-    bekle     10
+    bekle 20
     endm
 LCD_CharD  macro
     addlw     0x30            ; add 0x30 to convert to ASCII
@@ -70,18 +71,17 @@ LCD_CharD  macro
     endm
 LCD_Char     macro 
     movwf     LCDTemp
-    swapf     LCDTemp,1
+    ;swapf     LCDTemp,1
     movf      LCDTemp,0 
-    andlw     0x0f
+    andlw     0xf0
     movwf     lcdport
     bsf       lcdport, rs
     bsf         lcdport, e 
     nop  
     bcf         lcdport, e
     nop 
-	nop
     swapf     LCDTemp, w
-    andlw     0x0f
+    andlw     0xf0
     movwf     lcdport
     bsf       lcdport, rs
     bsf         lcdport, e 
@@ -91,7 +91,6 @@ LCD_Char     macro
     bekle     10
     nop 
     endm
-
 LCD_L1  macro
     movlw       0x80        ; move to 2nd row, first column
     instw4

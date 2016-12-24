@@ -1,6 +1,6 @@
    ;kesme yok
 -- ; pin tanımları  
-pinler5110(_5110port,dc,cs,rst)   ;pin5110(LATC,0,1,2)  pin isimleri
+pinler5110(_5110port,dc,cs,rst) 
 
 dc c
 cs c

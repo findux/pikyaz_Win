@@ -1,0 +1,129 @@
+yumu macro digsay
+local qss,son1
+      btfsc     key,0  ; önceden sayı var mı 0 sa/ yoksa  atla
+      goto      qss  ; sayıvar. yaz
+      MOVF      DIGIT#v(digsay),0
+      xorlw     0x0
+      btfss     STATUS,Z   ;  digit10 0 mı
+      goto      qss      ; 0 değil sayıvar  yaz
+      goto      son1      ; 0  yazma  ; sayı yok digit 0 mı kontrol et
+
+qss 
+      bsf       key,0
+      MOVF      DIGIT#v(digsay),0
+      _sayikont
+son1
+   endm
+
+__n51yaz macro
+      clrf    key
+	yumu 2,10
+	yumu 3,9
+	yumu 4,8
+	yumu 5,7
+	yumu 6,6
+	yumu 7,5
+	yumu 8,4
+	yumu 9,5
+	yumu 10,2
+      MOVF      DIGIT1,0
+      _sayikont
+      endm
+
+_sayikont macro
+      movwf   _sdeg
+      movlw .9
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _8kont
+      _99 
+      movlw  .11
+      addwf _yb , 1
+      return
+_8kont
+      movlw .8
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _7kont
+      _88 
+      movlw  .11
+      addwf _yb , 1
+      return
+_7kont
+      movlw .7
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _6kont
+      _77
+      movlw  .11
+      addwf _yb , 1
+      return
+_6kont
+      movlw .6
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _5kont
+      _66
+      movlw  .11
+      addwf _yb , 1
+      return
+_5kont
+      movlw .5
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _4kont
+      _55
+      movlw  .11
+      addwf _yb , 1
+      return
+_4kont
+      movlw .4
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _3kont
+      _44
+      movlw  .11
+      addwf _yb , 1
+      return
+_3kont
+      movlw .3
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _2kont
+      _33
+      movlw  .11
+      addwf _yb , 1
+      return
+    
+_2kont
+      movlw .2
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _1kont
+      _22
+      movlw  .11
+      addwf _yb , 1
+      return
+    
+_1kont
+      movlw .1
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      goto _0kont
+      _11
+      movlw  .11
+      addwf _yb , 1
+      return
+    
+_0kont
+      incf _sdeg,1
+      movlw .1
+      subwf   _sdeg,0
+      btfss  STATUS,Z 
+      return
+      _00
+      movlw  .11
+      addwf _yb , 1
+      endm
+
+

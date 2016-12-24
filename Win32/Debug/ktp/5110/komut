@@ -1,5 +1,6 @@
 n5110giris  ; n5110giris  / 5110 açılış komutları.
 5110temiz  ; 5110 u temizler
-5110yaz    ; 5110 ye karakter yazdırır.
+n5110yaz    ; n5110 5 10 bgf  / x 5 y 10 konumuna bgf yazar..
 n5110konum  ; n5110konum xdeg,ydeg / kursoru xdeğişkeni ve y değişkenindeki konuma taşır.
+n5110 pinler;pin5110(LATC,0,1,2) Vcc=3v blk=5v clk=pin11 din=pin27
 
