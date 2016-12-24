@@ -328,6 +328,7 @@ begin
   ProgressBar1.Position := 0;
   { TODO -oEyüp -cCategory : liste 3 ü tekar doldurmaya gerek varmý komut için ??? }
   ProgressBar1.Position := 5;
+  //ornek git hub
 
   AssignFile(afile, usak.mcrsyyol + '\kyt.pic');
   ReWrite(afile);
